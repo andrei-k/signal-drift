@@ -369,13 +369,13 @@ export class ImageFlow {
     `;
   }
 
-  _exitEvolution() {
+  _exitEvolution({ silent = false } = {}) {
     this.state.showEvolution = false;
     this.state.hasStarted = false;
     this._syncGlobal();
     if (this._evoKeyHandler) { document.removeEventListener('keydown', this._evoKeyHandler); this._evoKeyHandler = null; }
     if (this._evoLightboxKeyHandler) { document.removeEventListener('keydown', this._evoLightboxKeyHandler); this._evoLightboxKeyHandler = null; }
-    this.rerender();
+    if (!silent) this.rerender();
   }
 
   _attachEvolutionListeners() {
@@ -384,7 +384,7 @@ export class ImageFlow {
     });
 
     document.getElementById('blog-see-demo')?.addEventListener('click', () => {
-      this._exitEvolution();
+      this._exitEvolution({ silent: true });
       this.loadDemo();
     });
 
