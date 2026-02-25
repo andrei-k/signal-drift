@@ -229,7 +229,6 @@ export const PROJECT_TIMELINE = [
   { step: 'Control group idea', detail: 'Gemini suggests same-model baseline for comparison', models: 'Gemini 3 Pro', tag: null },
   { step: 'Simplify to 1 flow', detail: 'EN → FR (France vs Québec) translation only', models: 'Gemini 3 Pro + Opus 4.6', tag: 'pivot' },
   { step: '4 parallel rebuilds', detail: 'Same spec → Opus, Sonnet, Codex, Gemini. Sonnet wins.', models: 'Claude Code, Codex, Gemini CLI', tag: null },
-  { step: 'Taste Test pivot', detail: 'Audience judges anonymized model outputs — too much text', models: 'Opus 4.6', tag: 'pivot' },
   { step: 'Back to Signal Drift', detail: 'Drop translation, keep images only — "the aha is visual"', models: 'Opus 4.6', tag: 'pivot' },
   { step: 'Design & effects', detail: 'Typography, colors, background animation, easter eggs', models: 'Gemini 3 Pro, Opus 4.6, Kimi K2', tag: null },
   { step: 'Image experiments', detail: '~10 photos per demo, cut to best 4 each', models: 'GPT-5.2, Copilot, Gemini Pro', tag: null },
