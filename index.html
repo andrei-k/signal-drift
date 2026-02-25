@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SignalDrift: The Visual Telephone Game</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,400;0,500;0,600&family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="app">
+    <header class="app-header">
+      <a href="./" class="app-header__brand" aria-label="Back to SignalDrift home">
+<span class="app-header__title">Signal<span>Drift</span></span>
+      </a>
+      <nav class="section-tabs" id="section-tabs" aria-label="Select section" style="display:none">
+        <button class="section-tab section-tab--active" data-section="samePrompt">
+          <span class="section-tab__label">Same words in. Different images out.</span>
+        </button>
+        <button class="section-tab" data-section="sameGenerator">
+          <span class="section-tab__label">Different eyes. Different stories.</span>
+        </button>
+      </nav>
+    </header>
+    <main id="app-main"></main>
+  </div>
+  <script type="module" src="js/app.js?v=5"></script>
+</body>
+</html>
