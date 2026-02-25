@@ -4,11 +4,11 @@
 
 Signal Drift is an interactive web app that visualizes how different AI models interpret and recreate the same image. Feed a photo through multiple models and watch each one subtly reshape reality: one tidies up the mess, another invents rain for dramatic effect, a third tries to label every pixel.
 
-Built entirely with AI — using Claude, ChatGPT, Gemini, Copilot, and others — as a live demo for a [Concordia University Digital Skill-Share Days](https://www.concordia.ca/events/digital-skill-share.html) lightning talk on the multi-model approach.
+Built entirely with AI — using Claude, ChatGPT, Gemini, Copilot, and others — as a live demo for a [Concordia University Digital Skill-Share Days](https://sites.events.concordia.ca/sites/concordia/en/digital-skills-share-2026/) lightning talk on the multi-model approach.
 
 ## Live Demo
 
-**[signaldrift.app](https://signaldrift.app)** *(or wherever you deploy)*
+**[https://sites.events.concordia.ca/sites/concordia/en/digital-skills-share-2026/](https://andrei-k.github.io/signal-drift/#/)**
 
 ## How It Works
 
@@ -76,7 +76,3 @@ Then open [http://localhost:8080](http://localhost:8080).
 | **GPT Codex** | Codex 5.3 | Rapid parallel prototyping |
 | **Gemini CLI** | Gemini 3 Pro, Gemini 2.5 | Terminal tasks, bug fixing |
 | **Antigravity** | Gemini 3 Pro, Gemini 3 Flash | Experimental tasks |
-
-## License
-
-MIT
