@@ -346,7 +346,7 @@ export class ImageFlow {
         ${articleBody}
 
         <details class="blog-timeline-details" ${showTimeline ? 'open' : ''}>
-          <summary class="blog-timeline-summary">Project Timeline — All 16 Steps</summary>
+          <summary class="blog-timeline-summary">Project Timeline — All 15 Steps</summary>
           <div class="blog-timeline-content">
             <table class="evo-tl__table">
               <thead><tr>
