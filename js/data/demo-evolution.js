@@ -124,7 +124,7 @@ export const ARTICLE_SECTIONS = [
     type: 'model-cards',
     cards: [
       { model: 'ChatGPT', nickname: 'The Perfectionist', color: 'var(--color-model-chatgpt)', text: 'It tried to cram every single detail into the image, resulting in cluttered, forensic reconstructions. When tasked with describing a messy desk, it literally read every label on every box it could see.' },
-      { model: 'Copilot', nickname: 'The Corporate Editor', color: 'var(--color-model-copilot)', text: 'It sanitized everything. It organized a chaotic summer block party into neat rows. It turned a messy gym chalkboard into a formatted, corporate spreadsheet.' },
+      { model: 'Copilot', nickname: 'The Corporate Editor', color: 'var(--color-model-copilot)', text: 'It sanitized everything. A cluttered basement table with board games piled at odd angles and toys spilling out of bins became a tidy display with boxes squared up in neat stacks. It turned a messy gym chalkboard into a formatted, corporate spreadsheet.' },
       { model: 'Gemini', nickname: 'The Storyteller', color: 'var(--color-model-gemini)', text: 'It sacrificed exact details to capture the mood, atmosphere, and cinematic lighting. It invented rain to make a street festival look more dramatic.' },
     ],
   },
