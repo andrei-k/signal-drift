@@ -8,7 +8,7 @@ Built entirely with AI â€” using Claude, ChatGPT, Gemini, Copilot, and others â€
 
 ## Live Demo
 
-**[signaldrift.app](https://andrei-k.github.io/signal-drift/#/)** *(or wherever you deploy)*
+**[https://sites.events.concordia.ca/sites/concordia/en/digital-skills-share-2026/](https://andrei-k.github.io/signal-drift/#/)**
 
 ## How It Works
 
