@@ -8,7 +8,7 @@ Built entirely with AI â€” using Claude, ChatGPT, Gemini, Copilot, and others â€
 
 ## Live Demo
 
-**[signaldrift.app](https://signaldrift.app)** *(or wherever you deploy)*
+**[signaldrift.app](https://andrei-k.github.io/signal-drift/#/)** *(or wherever you deploy)*
 
 ## How It Works
 
