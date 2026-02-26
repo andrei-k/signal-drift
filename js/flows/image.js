@@ -876,7 +876,7 @@ export class ImageFlow {
             <h3 class="demo-section__title">Same words in. Different images out.</h3>
             <p class="demo-section__subtitle">
               <strong>${modelTip(sp.descriptionModelName || spDescModel?.name, spDescModel)}</strong> wrote the most detailed description possible.
-              The exact same prompt was sent to ${visibleItems.length} generators — any differences are purely about the tool.
+              The exact same prompt was sent to ${visibleItems.length} generators — any differences are purely about the model.
             </p>
           </div>
 
