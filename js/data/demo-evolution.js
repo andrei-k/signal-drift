@@ -130,7 +130,7 @@ export const ARTICLE_SECTIONS = [
   },
   {
     type: 'callout',
-    text: 'What surprised me most wasn\'t the hallucinations — it was the sanitization. Copilot didn\'t lie about what was on the chalkboard; it just quietly tidied reality into something that felt corporate and clean. That kind of silent editorializing was harder to catch than an outright fabrication.',
+    text: 'What surprised me most wasn\'t the hallucinations — it was the sanitization. Copilot didn\'t lie about what was on the chalkboard; it just quietly tidied reality into something that felt corporate and clean. In this demo, you can see it instantly because the original is right there. But in everyday AI use — summarizing a document, drafting a report, describing data — you\'d never know reality got quietly edited unless you thought to check. That\'s what makes silent editorializing dangerous: not that it\'s hard to spot, but that nothing prompts you to look.',
   },
   {
     type: 'heading',
