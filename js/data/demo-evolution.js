@@ -232,7 +232,6 @@ export const PROJECT_TIMELINE = [
   { step: 'Back to Signal Drift', detail: 'Drop translation, keep images only — "the aha is visual"', models: 'Opus 4.6', tag: 'pivot' },
   { step: 'Design & effects', detail: 'Typography, colors, background animation, easter eggs', models: 'Gemini 3 Pro, Opus 4.6, Kimi K2', tag: null },
   { step: 'Image experiments', detail: '~10 photos per demo, cut to best 4 each', models: 'GPT-5.2, Copilot, Gemini Pro', tag: null },
-  { step: 'Final rebuild', detail: 'Claude Code rebuilds entire app from spec in 8 minutes', models: 'Claude Code', tag: null },
   { step: 'Polish & present', detail: 'Presentation mode, Behind the Scenes, observations', models: 'Opus 4.6 + Gemini Pro', tag: null },
 ];
 
