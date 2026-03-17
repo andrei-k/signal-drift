@@ -157,7 +157,7 @@ export const ARTICLE_SECTIONS = [
     type: 'rebuild-table',
     rows: [
       { name: 'signal-drift-claude-1', stack: 'Claude Code + Opus 4.6' },
-      { name: 'signal-drift-claude-2', stack: 'Claude Code + Sonnet 4.6' },
+      { name: 'signal-drift-claude-2', stack: 'Claude Code + Sonnet 4.5' },
       { name: 'signal-drift-codex', stack: 'Codex 5.3' },
       { name: 'signal-drift-gemini', stack: 'Gemini 3 Pro' },
     ],
@@ -165,7 +165,7 @@ export const ARTICLE_SECTIONS = [
   },
   {
     type: 'prose',
-    html: `<p>The results were stark. Codex was remarkably bad, not even worth tweaking. Gemini stumbled on the very first step, needing manual intervention to fix a breaking error, and ultimately produced a mediocre result. <strong>Sonnet 4.6 was the undisputed winner.</strong> It built a fantastic, working app incredibly fast. As a bonus, I discovered that Opus 4.6 burns through tokens incredibly fast in Claude Code, whereas Sonnet 4.6 gave me stellar results while making my tokens last much longer.</p>
+    html: `<p>The results were stark. Codex was remarkably bad, not even worth tweaking. Gemini stumbled on the very first step, needing manual intervention to fix a breaking error, and ultimately produced a mediocre result. <strong>Sonnet 4.5 was the undisputed winner.</strong> It built a fantastic, working app incredibly fast. As a bonus, I discovered that Opus 4.6 burns through tokens incredibly fast in Claude Code, whereas Sonnet 4.5 gave me stellar results while making my tokens last much longer.</p>
 <p>After pivoting the app from text translations to image comparisons, the real detailed work began. I spent an evening iterating through UI details, juggling between Opus 4.6 and Gemini 3 Pro. At one point, Opus completely messed up the JavaScript for the UI accordions, but I handed the broken code to Gemini 3 Pro, which fixed it instantly. That swap ended up being one of the smoothest fixes of the whole project.</p>
 <p>To pick the right image models to test, I didn't guess. I asked <strong>Gemini Research</strong> to investigate the current landscape of image recognition and generation LLMs, specifically looking for popular ones that are surprisingly bad at certain tasks.</p>`,
   },
@@ -199,7 +199,7 @@ export const ARTICLE_SECTIONS = [
     type: 'tools-grid',
     tools: [
       { name: 'Cursor', models: 'Opus 4.6, Gemini 3 Pro', role: 'Architectural planning, UI refinement, and deep prompt-chaining' },
-      { name: 'Claude Code', models: 'Opus 4.6, Sonnet 4.6', role: 'Rapid, from-scratch app building directly in the terminal. Rebuilt the entire app from a spec in 8 minutes.' },
+      { name: 'Claude Code', models: 'Opus 4.6, Sonnet 4.5', role: 'Rapid, from-scratch app building directly in the terminal. Rebuilt the entire app from a spec in 8 minutes.' },
       { name: 'GPT Codex', models: 'Codex 5.3', role: 'Launching quick, parallel prototypes' },
       { name: 'Gemini CLI', models: 'Gemini 3 Pro, Gemini 2.5', role: 'Terminal-based task execution and bug fixing' },
       { name: 'Antigravity', models: 'Gemini 3 Pro, Gemini 3 Flash', role: 'Experimental tasks' },
