@@ -165,9 +165,8 @@ export const ARTICLE_SECTIONS = [
   },
   {
     type: 'prose',
-    html: `<p>The results were stark. Codex was remarkably bad, not even worth tweaking. Gemini stumbled on the very first step, needing manual intervention to fix a breaking error, and ultimately produced a mediocre result. <strong>Sonnet 4.5 was the undisputed winner.</strong> It built a fantastic, working app incredibly fast. As a bonus, I discovered that Opus 4.6 burns through tokens incredibly fast in Claude Code, whereas Sonnet 4.5 gave me stellar results while making my tokens last much longer.</p>
-<p>After pivoting the app from text translations to image comparisons, the real detailed work began. I spent an evening iterating through UI details, juggling between Opus 4.6 and Gemini 3 Pro. At one point, Opus completely messed up the JavaScript for the UI accordions, but I handed the broken code to Gemini 3 Pro, which fixed it instantly. That swap ended up being one of the smoothest fixes of the whole project.</p>
-<p>To pick the right image models to test, I didn't guess. I asked <strong>Gemini Research</strong> to investigate the current landscape of image recognition and generation LLMs, specifically looking for popular ones that are surprisingly bad at certain tasks.</p>`,
+    html: `<p>The results were stark. Codex was remarkably bad, not even worth tweaking. Gemini stumbled on the very first step, needing manual intervention to fix a breaking error, and ultimately produced a mediocre result. <strong>Sonnet 4.5 was the undisputed winner.</strong> It built a fantastic, working app incredibly fast. As a bonus, Opus burns through tokens incredibly fast in Claude Code, whereas Sonnet gave me stellar results while making my tokens last much longer.</p>
+<p>After pivoting the app from text translations to image comparisons, the real detailed work began. I spent an evening iterating through UI details, juggling between Opus 4.6 and Gemini 3 Pro. At one point, Opus completely messed up the JavaScript for the UI accordions, but I handed the broken code to Gemini 3 Pro, which fixed it instantly. That swap ended up being one of the smoothest fixes of the whole project.</p>`,
   },
   {
     type: 'image',
@@ -177,7 +176,7 @@ export const ARTICLE_SECTIONS = [
   },
   {
     type: 'prose',
-    html: `<p>Finally, it was time for design polish. The app was looking very generic, the classic "AI slop" aesthetic. I prompted <strong>Gemini 3.1 Pro</strong> to completely redesign the frontend, explicitly telling it to avoid overused fonts (like Roboto) and clichéd color schemes. Gemini delivered a beautiful, dark-themed UI. We then worked together to add a complex, animated particle background. I brought in <strong>Kimi K2</strong> for some final artistic touches, and even implemented an interactive easter egg effect where moving your mouse to the corners triggers model-specific animations.</p>
+    html: `<p>Finally, it was time for design polish. The app was looking very generic, the classic "AI slop" aesthetic. I prompted <strong>Gemini 3 Pro</strong> to completely redesign the frontend, explicitly telling it to avoid overused fonts (like Roboto) and clichéd color schemes. Gemini delivered a beautiful, dark-themed UI. We then worked together to add a complex, animated particle background. I brought in <strong>Kimi K2</strong> for some final artistic touches, and even implemented an interactive easter egg effect where moving your mouse to the corners triggers model-specific animations.</p>
 <p>Looking back, the build was a constant baton-pass: Opus for the architectural blueprint, Gemini for structural critique and visual design, Sonnet for writing the actual code. No single model carried the whole thing.</p>`,
   },
   {
