@@ -109,32 +109,6 @@ export const ARTICLE_SECTIONS = [
   {
     type: 'heading',
     number: '03',
-    title: 'Signal Drift: Watching AIs Hallucinate (and Sanitize)',
-  },
-  {
-    type: 'prose',
-    html: `<p>The final app, <strong>Signal Drift</strong>, visualizes how AI distorts visual information. I set up two distinct flows:</p>
-<ol>
-<li><strong>Same Prompt, Different Generators:</strong> One highly detailed description of a photo fed to ChatGPT, Copilot, and Gemini to generate images.</li>
-<li><strong>Different Describers, Same Generator:</strong> Three different models describing a photo, with all three text descriptions fed into a single generator (ChatGPT).</li>
-</ol>
-<p>This is where things got really interesting. The results lined up with the personality traits I'd noticed during the planning phase.</p>`,
-  },
-  {
-    type: 'model-cards',
-    cards: [
-      { model: 'ChatGPT', nickname: 'The Perfectionist', color: 'var(--color-model-chatgpt)', text: 'It tried to cram every single detail into the image, resulting in cluttered, forensic reconstructions. When tasked with describing a messy desk, it literally read every label on every box it could see.' },
-      { model: 'Copilot', nickname: 'The Corporate Editor', color: 'var(--color-model-copilot)', text: 'It sanitized everything. A cluttered basement table with board games piled at odd angles and toys spilling out of bins became a tidy display with boxes squared up in neat stacks. It turned a messy gym chalkboard into a formatted, corporate spreadsheet.' },
-      { model: 'Gemini', nickname: 'The Storyteller', color: 'var(--color-model-gemini)', text: 'It sacrificed exact details to capture the mood, atmosphere, and cinematic lighting. It invented rain to make a street festival look more dramatic.' },
-    ],
-  },
-  {
-    type: 'callout',
-    text: 'What surprised me most wasn\'t the hallucinations. It was the sanitization. Copilot didn\'t lie about what was on the chalkboard; it just quietly tidied reality into something that felt corporate and clean. In this demo, you can see it instantly because the original is right there. But in everyday AI use (summarizing a document, drafting a report, describing data) you\'d never know reality got quietly edited unless you thought to check. That\'s what makes silent editorializing dangerous: not that it\'s hard to spot, but that nothing prompts you to look.',
-  },
-  {
-    type: 'heading',
-    number: '04',
     title: 'The Build Journey: Competing Models and Parallel Rebuilds',
   },
   {
@@ -184,6 +158,33 @@ export const ARTICLE_SECTIONS = [
     src: 'images/evolution/5 - Tools and visuals/claude-code-1.png',
     caption: 'Claude Code rebuilds the entire app from a spec file in 8 minutes',
     tool: 'Claude Code',
+  },
+  {
+    type: 'heading',
+    number: '04',
+    title: 'Signal Drift: Watching AIs Hallucinate (and Sanitize)',
+  },
+  {
+    type: 'prose',
+    html: `<p>The final app, <strong>Signal Drift</strong>, visualizes how AI distorts visual information. I set up two distinct flows:</p>
+<ol>
+<li><strong>Same Prompt, Different Generators:</strong> One highly detailed description of a photo fed to ChatGPT, Copilot, and Gemini to generate images.</li>
+<li><strong>Different Describers, Same Generator:</strong> Three different models describing a photo, with all three text descriptions fed into a single generator (ChatGPT).</li>
+</ol>
+<p>To pick the right image models to test, I didn't guess. I asked <strong>Gemini Research</strong> to investigate the current landscape of image recognition and generation LLMs, specifically looking for popular ones that are surprisingly bad at certain tasks.</p>
+<p>This is where things got really interesting. The results lined up with the personality traits I'd noticed during the planning phase.</p>`,
+  },
+  {
+    type: 'model-cards',
+    cards: [
+      { model: 'ChatGPT', nickname: 'The Perfectionist', color: 'var(--color-model-chatgpt)', text: 'It tried to cram every single detail into the image, resulting in cluttered, forensic reconstructions. When tasked with describing a messy desk, it literally read every label on every box it could see.' },
+      { model: 'Copilot', nickname: 'The Corporate Editor', color: 'var(--color-model-copilot)', text: 'It sanitized everything. A cluttered basement table with board games piled at odd angles and toys spilling out of bins became a tidy display with boxes squared up in neat stacks. It turned a messy gym chalkboard into a formatted, corporate spreadsheet.' },
+      { model: 'Gemini', nickname: 'The Storyteller', color: 'var(--color-model-gemini)', text: 'It sacrificed exact details to capture the mood, atmosphere, and cinematic lighting. It invented rain to make a street festival look more dramatic.' },
+    ],
+  },
+  {
+    type: 'callout',
+    text: 'What surprised me most wasn\'t the hallucinations. It was the sanitization. Copilot didn\'t lie about what was on the chalkboard; it just quietly tidied reality into something that felt corporate and clean. In this demo, you can see it instantly because the original is right there. But in everyday AI use (summarizing a document, drafting a report, describing data) you\'d never know reality got quietly edited unless you thought to check. That\'s what makes silent editorializing dangerous: not that it\'s hard to spot, but that nothing prompts you to look.',
   },
   {
     type: 'heading',
