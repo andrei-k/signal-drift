@@ -317,6 +317,12 @@ export class ImageFlow {
             `).join('')}
           </div>`;
 
+      case 'video':
+        return `
+          <div class="blog-video">
+            <iframe src="${escHtml(section.src)}" title="${escHtml(section.title || '')}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>`;
+
       default:
         return '';
     }

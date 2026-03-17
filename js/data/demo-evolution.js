@@ -216,6 +216,11 @@ export const ARTICLE_SECTIONS = [
 <p>Going forward, I'm treating models less like competing products and more like colleagues with different strengths. Opus for architecture, Sonnet for fast reliable code, Gemini for design critique and creative direction. The orchestration (knowing when to swap) turned out to be the actual skill I was building the whole time.</p>
 <p>Five minutes wasn't enough to say all that on stage. But it was enough to show it.</p>`,
   },
+  {
+    type: 'video',
+    src: 'https://www.youtube.com/embed/MYdCMafnKGs?start=1384',
+    title: 'Digital Skill-Share Days 2026: The Multi-Model Approach',
+  },
 ];
 
 export const PROJECT_TIMELINE = [
