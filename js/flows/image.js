@@ -231,7 +231,7 @@ export class ImageFlow {
           <header class="blog-header">
             <h1 class="blog-title">${escHtml(section.title)}</h1>
             <p class="blog-subtitle">${escHtml(section.subtitle)}</p>
-            <div class="blog-byline">By <strong>${escHtml(section.author.split(' — ')[0])}</strong>${section.author.includes(' — ') ? ' — ' + escHtml(section.author.split(' — ').slice(1).join(' — ')) : ''}</div>
+            ${section.author ? `<div class="blog-byline">By <strong>${escHtml(section.author)}</strong></div>` : ''}
             <div class="blog-divider"></div>
           </header>`;
 
