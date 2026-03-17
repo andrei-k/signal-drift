@@ -35,7 +35,7 @@ export const ARTICLE_SECTIONS = [
     cards: [
       { model: 'ChatGPT 5.2', nickname: 'The Thorough Analyst', color: 'var(--color-model-chatgpt)', text: 'Gave me a structurally exhaustive project charter. It demanded scoring matrices, deliverables, and assumption challenges.' },
       { model: 'Claude Sonnet 4.5', nickname: 'The Storyteller', color: 'var(--color-model-claude)', text: 'Cut straight to decisions. It defined crisp success criteria and focused on the narrative arc of the eventual demo.' },
-      { model: 'Gemini 3', nickname: 'The Big-Picture Creative', color: 'var(--color-model-gemini)', text: 'Assigned a "Creative Director" persona, demanding I focus on the visual "aha!" moment to maximize audience impact.' },
+      { model: 'Gemini 3', nickname: 'The Big-Picture Creative', color: 'var(--color-model-gemini)', text: 'Assigned itself a "Creative Director" persona, demanding I focus on the visual "aha!" moment to maximize audience impact.' },
       { model: 'MS Copilot', nickname: 'The Operations Manager', color: 'var(--color-model-copilot)', text: 'Produced a highly structured "Idea Card" format and a weighted decision matrix. Enterprise DNA runs deep here.' },
     ],
   },

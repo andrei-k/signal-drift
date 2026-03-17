@@ -1837,6 +1837,16 @@ mark.annotation:hover, mark.annotation:focus {
   color: var(--color-text);
   font-style: italic;
 }
+.blog-prose a {
+  color: var(--color-text);
+  text-decoration: underline;
+  text-decoration-color: var(--color-accent);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.2s ease;
+}
+.blog-prose a:hover {
+  text-decoration-color: var(--color-text);
+}
 .blog-prose ol, .blog-prose ul {
   padding-left: 1.4em;
   margin-bottom: 1em;
