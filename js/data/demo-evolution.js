@@ -212,7 +212,7 @@ export const ARTICLE_SECTIONS = [
   },
   {
     type: 'prose',
-    html: `<p>The biggest thing I took away from this project: <strong>sticking with one AI would have given me a worse result.</strong> Each model had blind spots, and the only reason I caught them was because another model didn't share them.</p>
+    html: `<p>The biggest thing I took away from this project: <strong>sticking with one AI model would have given me a worse result.</strong> Each model had blind spots, and the only reason I caught them was because another model didn't share them.</p>
 <p>Going forward, I'm treating models less like competing products and more like colleagues with different strengths. Opus for architecture, Sonnet for fast reliable code, Gemini for design critique and creative direction. The orchestration (knowing when to swap) turned out to be the actual skill I was building the whole time.</p>
 <p>Five minutes wasn't enough to say all that on stage. But it was enough to show it.</p>`,
   },

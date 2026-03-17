@@ -2142,7 +2142,6 @@ mark.annotation:hover, mark.annotation:focus {
   color: var(--color-text);
   padding: 5px 10px;
   font-weight: 600;
-  white-space: nowrap;
 }
 .evo-tl__detail {
   color: var(--color-text-subtle);
