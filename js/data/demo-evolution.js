@@ -208,7 +208,7 @@ export const ARTICLE_SECTIONS = [
   {
     type: 'heading',
     number: '06',
-    title: 'What I\'d Do Differently (And What I\'ll Keep Doing)',
+    title: 'The Takeaway',
   },
   {
     type: 'prose',
