@@ -302,7 +302,7 @@ export const IMAGE_OBSERVATIONS = {
     'Your actual messy desk. The Perfectionist doesn\'t editorialize — it reconstructs.',
   ],
   'images/demo-1/demo-1-e-copilot.png': [
-    'Every object is present, but perfectly spaced with breathing room. The notebook and sunglasses are centered on the tray. It even added a small red apple.',
+    'Every object is present, but perfectly spaced with breathing room. The notebook and sunglasses are centered on the tray. It even added two red apples.',
     'The lived-in surface became a real estate listing. The Editor turned your desk into a product shoot.',
   ],
   'images/demo-1/demo-1-e-gemini.png': [
