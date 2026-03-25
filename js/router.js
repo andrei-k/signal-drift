@@ -37,8 +37,7 @@ function notify() {
 
 function parseHash(hash) {
   const raw = (hash || '#/').slice(1) || '/';
-  const [path, qs] = raw.split('?');
+  const path = raw.split('?')[0];
   const segments = path.split('/').filter(Boolean);
-  const params = new URLSearchParams(qs || '');
-  return { path, segments, params };
+  return { path, segments };
 }

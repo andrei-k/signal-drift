@@ -35,7 +35,6 @@ function updateHeaderTabs() {
 
 function routePathForState() {
   const s = imageFlow.state;
-  if (s.showEvolution) return '/behind-the-scenes';
   if (!s.hasStarted) return '/';
   if (s.isDemoLoaded && s.currentStep === 3) {
     const tab = s.activeTab || 'samePrompt';
@@ -67,22 +66,8 @@ function applyRouteInner(route) {
   const s = imageFlow.state;
 
   if (seg.length === 0 || (seg.length === 1 && seg[0] === '')) {
-    if (s.showEvolution) {
-      imageFlow._exitEvolution();
-      return;
-    }
     s.hasStarted = false;
     s.isDemoLoaded = false;
-    s.showEvolution = false;
-    imageFlow._syncGlobal();
-    render();
-    return;
-  }
-
-  if (seg[0] === 'behind-the-scenes') {
-    s.showEvolution = true;
-    s.hasStarted = true;
-    s.evolutionIdx = 0;
     imageFlow._syncGlobal();
     render();
     return;
@@ -109,7 +94,6 @@ function applyRouteInner(route) {
       return;
     }
     s.hasStarted = true;
-    s.showEvolution = false;
     if (s.isDemoLoaded && step < 3) {
       s.isDemoLoaded = false;
       s.demoSections = null;
@@ -129,11 +113,6 @@ function rerenderWithRoute() {
 }
 
 function init() {
-  const rawUrl = decodeURIComponent(window.location.href);
-  if (new URLSearchParams(rawUrl.split('?')[1] || '').get('present') === '1') {
-    document.body.classList.add('presentation-mode');
-  }
-
   initBackground(appState);
   imageFlow = new ImageFlow(appState, rerenderWithRoute);
 
