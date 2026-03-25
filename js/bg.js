@@ -1,15 +1,3 @@
-import { geminiEffect } from './effects/gemini.js';
-import { opusEffect }   from './effects/opus.js';
-
-// ── Effect Registry ──────────────────────────────────────────────────
-// Each corner maps to an effect module. Register new effects here.
-// Top-left = exit, bottom-left = reserved for future effect.
-const effects = {
-  'bottom-right': geminiEffect,
-  'top-right':    opusEffect,
-  'bottom-left':  null,
-};
-
 export function initBackground(appState) {
   const canvas = document.createElement('canvas');
   canvas.id = 'cyber-bg';
@@ -29,18 +17,6 @@ export function initBackground(appState) {
   let width, height;
   let particles = [];
 
-  // ── Effect state ───────────────────────────────────────────────────
-  let activeEffect = null;      // currently active effect object (or null)
-  let effectTransition = 0;     // smooth 0 → 1 ramp while an effect is on
-
-  const appEl = document.getElementById('app');
-  if (appEl) {
-    appEl.style.transition =
-      'opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), ' +
-      'filter 0.8s cubic-bezier(0.4, 0, 0.2, 1), ' +
-      'transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
-  }
-
   // Funky Pop Theme Colors (RGB) for high luminosity
   const colorOrange  = '255, 106, 0';
   const colorCyan    = '0, 229, 255';
@@ -48,48 +24,6 @@ export function initBackground(appState) {
   const colors = [colorOrange, colorCyan, colorEmerald];
 
   let mouse = { x: -1000, y: -1000, radius: 120, active: false };
-
-  // ── Helpers ────────────────────────────────────────────────────────
-
-  function activateEffect(effect) {
-    if (!effect || activeEffect === effect) return;
-    activeEffect = effect;
-    if (appEl) {
-      appEl.style.opacity = '0';
-      appEl.style.pointerEvents = 'none';
-      appEl.style.filter = 'blur(10px)';
-      appEl.style.transform = 'scale(0.95)';
-      appEl.style.visibility = 'hidden';
-    }
-  }
-
-  function deactivateEffect() {
-    if (!activeEffect) return;
-    activeEffect = null;
-    if (appEl) {
-      appEl.style.visibility = 'visible';
-      appEl.style.opacity = '1';
-      appEl.style.pointerEvents = 'auto';
-      appEl.style.filter = 'blur(0px)';
-      appEl.style.transform = 'scale(1)';
-    }
-  }
-
-  /**
-   * Detect which corner the mouse is in.
-   * Returns { action: 'activate', effect } or { action: 'exit' } or null.
-   * When an effect is active, only the top-left exit corner is recognised;
-   * all activation corners are locked out until the effect is dismissed.
-   */
-  function detectCorner(mx, my) {
-    const d = 60; // trigger distance from edge
-    if (mx < d && my < d) return { action: 'exit' };
-    if (activeEffect) return null;
-    if (mx > width  - d && my > height - d) return { action: 'activate', effect: effects['bottom-right'] };
-    if (mx > width  - d && my < d)          return { action: 'activate', effect: effects['top-right'] };
-    if (mx < d          && my > height - d) return { action: 'activate', effect: effects['bottom-left'] };
-    return null;
-  }
 
   // ── Resize ─────────────────────────────────────────────────────────
 
@@ -106,34 +40,18 @@ export function initBackground(appState) {
   window.addEventListener('mousemove', (e) => {
     if (appState && (appState.hasStarted || appState.isDemoLoaded)) {
       mouse.active = false;
-      deactivateEffect();
       return;
     }
 
     mouse.x = e.clientX;
     mouse.y = e.clientY;
     mouse.active = true;
-
-    // Corner detection
-    const corner = detectCorner(mouse.x, mouse.y);
-    if (corner) {
-      if (corner.action === 'exit') {
-        deactivateEffect();
-      } else if (corner.action === 'activate' && !activeEffect && corner.effect) {
-        activateEffect(corner.effect);
-      }
-    }
   });
 
   window.addEventListener('mouseleave', () => {
     mouse.active = false;
     mouse.x = -1000;
     mouse.y = -1000;
-  });
-
-  // ESC exits any active effect
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') deactivateEffect();
   });
 
   // ── Signal Node (core particle) ────────────────────────────────────
@@ -170,30 +88,17 @@ export function initBackground(appState) {
 
       this.staticJitter = { x: 0, y: 0 };
       this.staticFlash  = 0;
-      this.hueOffset    = 0;
     }
 
-    update(scaleOffset, centerX, centerY) {
-      const speedMult = 1 + (effectTransition * 0.8);
-
+    update(centerX, centerY) {
       if (this.axis === 'x') {
-        this.x += this.baseSpeed * this.dir * speedMult;
+        this.x += this.baseSpeed * this.dir;
       } else {
-        this.y += this.baseSpeed * this.dir * speedMult;
+        this.y += this.baseSpeed * this.dir;
       }
 
-      let dxFromCenter = this.x - centerX;
-      let dyFromCenter = this.y - centerY;
-      const currentScale = 1 + (scaleOffset * this.z * 0.4);
-
-      this.screenX = centerX + dxFromCenter * currentScale;
-      this.screenY = centerY + dyFromCenter * currentScale;
-
-      // Base hue (always computed — effects may override further)
-      if (activeEffect) {
-        activeEffect.modifyParticleUpdate(this, effectTransition);
-      }
-      this.hue = (Date.now() * 0.05 + this.screenX * 0.2 + this.screenY * 0.2 + this.z * 150 + (this.hueOffset || 0)) % 360;
+      this.screenX = this.x;
+      this.screenY = this.y;
 
       // Mouse interaction
       this.staticJitter.x = 0;
@@ -206,23 +111,14 @@ export function initBackground(appState) {
         let my   = mouse.y - this.screenY;
         let dist = Math.sqrt(mx * mx + my * my);
 
-        let interactRadius = mouse.radius * (1 + effectTransition * 1.5);
-
-        if (dist < interactRadius) {
+        if (dist < mouse.radius) {
           this.isFreakingOut = true;
-          const intensity   = (interactRadius - dist) / interactRadius;
-          const staticForce = 12 * intensity * (1 + effectTransition * 2.0);
+          const intensity   = (mouse.radius - dist) / mouse.radius;
+          const staticForce = 12 * intensity;
 
-          let handled = false;
-          if (activeEffect && activeEffect.modifyMouseInteract) {
-            handled = activeEffect.modifyMouseInteract(this, intensity, staticForce, effectTransition);
-          }
-
-          if (!handled) {
-            this.staticJitter.x = (Math.random() - 0.5) * staticForce * 2;
-            this.staticJitter.y = (Math.random() - 0.5) * staticForce * 2;
-            this.staticFlash = 6;
-          }
+          this.staticJitter.x = (Math.random() - 0.5) * staticForce * 2;
+          this.staticJitter.y = (Math.random() - 0.5) * staticForce * 2;
+          this.staticFlash = 6;
         }
       }
 
@@ -232,13 +128,10 @@ export function initBackground(appState) {
       this.history.unshift({
         x: this.drawX, y: this.drawY,
         freak: this.isFreakingOut,
-        flash: this.staticFlash > 0,
-        hue: this.hue,
-        intensity: this.isFreakingOut ? 1 : 0
+        flash: this.staticFlash > 0
       });
 
-      const maxLen = this.historyLen + (effectTransition * 6);
-      if (this.history.length > maxLen) this.history.pop();
+      if (this.history.length > this.historyLen) this.history.pop();
 
       if (
         (this.axis === 'x' && this.dir ===  1 && this.x > width + 200)  ||
@@ -250,14 +143,13 @@ export function initBackground(appState) {
       }
     }
 
-    // ── Default drawing (no effect active) ───────────────────────────
+    // ── Drawing ─────────────────────────────────────────────────────
 
-    drawTrailDefault() {
+    drawTrail() {
       if (this.history.length <= 1) return;
 
-      const baseOpacity = Math.min(0.9, 0.3 + this.z * 0.25);
-      const opacity     = Math.min(1, baseOpacity + effectTransition * 0.3);
-      const trailColor  = `rgba(${this.color}, ${opacity * 0.55})`;
+      const opacity    = Math.min(0.9, 0.3 + this.z * 0.25);
+      const trailColor = `rgba(${this.color}, ${opacity * 0.55})`;
 
       ctx.beginPath();
       ctx.moveTo(this.history[0].x, this.history[0].y);
@@ -274,42 +166,24 @@ export function initBackground(appState) {
       }
 
       ctx.strokeStyle = trailColor;
-      ctx.lineWidth   = (0.8 + effectTransition) * this.z * 0.75;
+      ctx.lineWidth   = 0.8 * this.z * 0.75;
       ctx.stroke();
     }
 
-    drawNodeDefault() {
-      const baseOpacity  = Math.min(0.9, 0.3 + this.z * 0.25);
-      const opacity      = Math.min(1, baseOpacity + effectTransition * 0.3);
-      const displayColor = `rgba(${this.color}, 1)`;
-      const size         = (1.8 + effectTransition * 1.2) * this.z;
+    drawNode() {
+      const opacity = Math.min(0.9, 0.3 + this.z * 0.25);
+      const size    = 1.8 * this.z;
 
       if (this.staticFlash > 0) {
         ctx.fillStyle = 'rgba(255, 255, 255, 1)';
         ctx.fillRect(this.drawX - size * 1.4, this.drawY - size * 1.4, size * 2.8, size * 2.8);
 
-        ctx.fillStyle = displayColor;
+        ctx.fillStyle = `rgba(${this.color}, 1)`;
         ctx.fillRect(this.drawX - size, this.drawY - size, size * 2, size * 2);
       } else {
         ctx.fillStyle = `rgba(${this.color}, ${opacity})`;
         ctx.fillRect(this.drawX - size / 2, this.drawY - size / 2, size, size);
       }
-    }
-
-    // ── Delegating draw calls ────────────────────────────────────────
-
-    drawTrail() {
-      if (activeEffect && activeEffect.drawTrail) {
-        if (activeEffect.drawTrail(ctx, this, effectTransition)) return;
-      }
-      this.drawTrailDefault();
-    }
-
-    drawNode() {
-      if (activeEffect && activeEffect.drawNode) {
-        if (activeEffect.drawNode(ctx, this, effectTransition)) return;
-      }
-      this.drawNodeDefault();
     }
   }
 
@@ -323,9 +197,9 @@ export function initBackground(appState) {
     for (let i = 0; i < n; i++) particles.push(new SignalNode());
   }
 
-  // ── Default connection drawing ─────────────────────────────────────
+  // ── Connection drawing ─────────────────────────────────────────────
 
-  function drawConnectionDefault(p1, p2, opacity, isFreaking, transition) {
+  function drawConnection(p1, p2, opacity, isFreaking) {
     ctx.beginPath();
 
     if (isFreaking) {
@@ -339,7 +213,7 @@ export function initBackground(appState) {
       ctx.lineTo(p2.drawX, p2.drawY);
     } else {
       ctx.strokeStyle = `rgba(${p1.color}, ${opacity})`;
-      ctx.lineWidth   = 0.6 * (0.7 + transition * 0.4);
+      ctx.lineWidth   = 0.6 * 0.7;
       ctx.moveTo(p1.drawX, p1.drawY);
       ctx.lineTo(p2.drawX, p2.drawY);
     }
@@ -350,31 +224,10 @@ export function initBackground(appState) {
   // ── Main loop ──────────────────────────────────────────────────────
 
   function animate() {
-    // Smooth transition ramp
-    if (activeEffect) {
-      effectTransition += (1 - effectTransition) * 0.04;
-    } else {
-      effectTransition += (0 - effectTransition) * 0.04;
-    }
-
     ctx.clearRect(0, 0, width, height);
 
-    const centerX     = width / 2;
-    const centerY     = height / 2;
-    const scaleOffset = effectTransition * 4.0;
-
-    // Let active effect run per-frame logic (spawn particles, etc.)
-    if (activeEffect && activeEffect.onFrame) {
-      activeEffect.onFrame({
-        ctx, width, height, centerX, centerY,
-        effectTransition, particles, SignalNode
-      });
-    }
-
-    // Trim excess particles when no effect is active
-    if (!activeEffect && particles.length > baseParticleCount()) {
-      particles.pop();
-    }
+    const centerX = width / 2;
+    const centerY = height / 2;
 
     // Connections
     for (let i = 0; i < particles.length; i++) {
@@ -383,30 +236,20 @@ export function initBackground(appState) {
         let dy = particles[i].drawY - particles[j].drawY;
         let distance = Math.sqrt(dx * dx + dy * dy);
 
-        let zDiff  = Math.abs(particles[i].z - particles[j].z);
-        const maxDist = 90 + (effectTransition * 150);
+        let zDiff = Math.abs(particles[i].z - particles[j].z);
+        const maxDist = 90;
 
         if (distance < maxDist && zDiff < 1.0) {
-          const opacity    = (1 - distance / maxDist) * (0.18 + effectTransition * 0.25);
+          const opacity    = (1 - distance / maxDist) * 0.18;
           const isFreaking = particles[i].isFreakingOut || particles[j].isFreakingOut;
-
-          let handled = false;
-          if (activeEffect && activeEffect.drawConnection) {
-            handled = activeEffect.drawConnection(
-              ctx, particles[i], particles[j],
-              distance, maxDist, opacity, isFreaking, effectTransition
-            );
-          }
-          if (!handled) {
-            drawConnectionDefault(particles[i], particles[j], opacity, isFreaking, effectTransition);
-          }
+          drawConnection(particles[i], particles[j], opacity, isFreaking);
         }
       }
     }
 
     // Update + trails
     for (let i = 0; i < particles.length; i++) {
-      particles[i].update(scaleOffset, centerX, centerY);
+      particles[i].update(centerX, centerY);
       particles[i].drawTrail();
     }
 
