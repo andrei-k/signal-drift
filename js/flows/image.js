@@ -1,7 +1,7 @@
 import { renderStepIndicator, renderNav, attachNavListeners } from '../ui/wizard.js';
 import { MODELS, getModel } from '../ui/models.js';
 import { SAMPLE_IMAGES, DEMO_IMAGE_CHAINS, IMAGE_OBSERVATIONS } from '../data/demo-image.js';
-import { EVOLUTION_STEPS, PROJECT_TIMELINE, ARTICLE_SECTIONS } from '../data/demo-evolution.js';
+
 
 const IMAGE_STEPS = [
   { label: 'Select Image' },
@@ -102,7 +102,6 @@ export class ImageFlow {
   }
 
   render() {
-    if (this.state.showEvolution) return this.renderEvolution();
     if (!this.state.hasStarted) return this.renderWelcome();
     switch (this.state.currentStep) {
       case 0: return this.renderSelectStep();
@@ -114,7 +113,6 @@ export class ImageFlow {
   }
 
   attachListeners() {
-    if (this.state.showEvolution) { this._attachEvolutionListeners(); return; }
     if (!this.state.hasStarted) { this._attachWelcomeListeners(); return; }
     switch (this.state.currentStep) {
       case 0: this._attachSelectListeners(); break;
@@ -196,7 +194,7 @@ export class ImageFlow {
         </div>
 
         <div class="welcome-cta">
-          <button class="btn btn--ghost btn--lg" id="welcome-evolution">Behind the Scenes</button>
+          <a class="btn btn--ghost btn--lg" href="https://12ak.com/posts/how-i-built-signal-drift/" target="_blank" rel="noopener">Behind the Scenes</a>
           <button class="btn btn--primary btn--lg" id="welcome-demo">See the Demo</button>
           <button class="btn btn--secondary btn--lg" id="welcome-start">Start Your Own</button>
         </div>
@@ -214,236 +212,6 @@ export class ImageFlow {
     document.getElementById('welcome-demo')?.addEventListener('click', () => {
       this.loadDemo();
     });
-    document.getElementById('welcome-evolution')?.addEventListener('click', () => {
-      this.state.showEvolution = true;
-      this.state.hasStarted = true;
-      this.state.evolutionIdx = 0;
-      this._syncGlobal();
-      this.rerender();
-    });
-  }
-
-  // ---- EVOLUTION / BEHIND THE SCENES (Blog Post) ----
-  _renderArticleSection(section) {
-    switch (section.type) {
-      case 'header':
-        return `
-          <header class="blog-header">
-            <h1 class="blog-title">${escHtml(section.title)}</h1>
-            <p class="blog-subtitle">${escHtml(section.subtitle)}</p>
-            ${section.author ? `<div class="blog-byline">By <strong>${escHtml(section.author)}</strong></div>` : ''}
-            <div class="blog-divider"></div>
-          </header>`;
-
-      case 'heading':
-        return `
-          <div class="blog-section-heading">
-            <span class="blog-section-number">${escHtml(section.number)}</span>
-            <h2 class="blog-section-title">${escHtml(section.title)}</h2>
-          </div>`;
-
-      case 'prose':
-        return `<div class="blog-prose">${section.html}</div>`;
-
-      case 'callout':
-        return `
-          <blockquote class="blog-callout">
-            <p>${escHtml(section.text)}</p>
-          </blockquote>`;
-
-      case 'image':
-        return `
-          <figure class="blog-figure" data-lightbox-src="${escAttr(section.src)}">
-            <div class="blog-figure__img-wrap">
-              <img src="${escAttr(section.src)}" alt="${escAttr(section.caption)}" loading="lazy" />
-            </div>
-            <figcaption class="blog-figure__caption">
-              <span class="blog-figure__tool">${escHtml(section.tool)}</span>
-              <span class="blog-figure__text">${escHtml(section.caption)}</span>
-            </figcaption>
-          </figure>`;
-
-      case 'image-pair':
-        return `
-          <div class="blog-image-pair">
-            ${section.images.map(img => `
-              <figure class="blog-figure blog-figure--half" data-lightbox-src="${escAttr(img.src)}">
-                <div class="blog-figure__img-wrap">
-                  <img src="${escAttr(img.src)}" alt="${escAttr(img.caption)}" loading="lazy" />
-                </div>
-                <figcaption class="blog-figure__caption">
-                  <span class="blog-figure__tool">${escHtml(img.tool)}</span>
-                  <span class="blog-figure__text">${escHtml(img.caption)}</span>
-                </figcaption>
-              </figure>
-            `).join('')}
-          </div>`;
-
-      case 'model-cards':
-        return `
-          <div class="blog-model-cards">
-            ${section.cards.map(c => `
-              <div class="blog-model-card" style="--card-accent: ${c.color}">
-                <div class="blog-model-card__header">
-                  <strong class="blog-model-card__name">${escHtml(c.model)}</strong>
-                  <span class="blog-model-card__nick">${escHtml(c.nickname)}</span>
-                </div>
-                <p class="blog-model-card__text">${escHtml(c.text)}</p>
-              </div>
-            `).join('')}
-          </div>`;
-
-      case 'rebuild-table':
-        return `
-          <div class="blog-rebuild-table">
-            ${section.rows.map(r => `
-              <div class="blog-rebuild-row ${r.name === section.winner ? 'blog-rebuild-row--winner' : ''}">
-                <code class="blog-rebuild-row__name">${escHtml(r.name)}</code>
-                <span class="blog-rebuild-row__stack">${escHtml(r.stack)}</span>
-                ${r.name === section.winner ? '<span class="blog-rebuild-row__badge">Winner</span>' : ''}
-              </div>
-            `).join('')}
-          </div>`;
-
-      case 'tools-grid':
-        return `
-          <div class="blog-tools-grid">
-            ${section.tools.map(t => `
-              <div class="blog-tool-card">
-                <div class="blog-tool-card__name">${escHtml(t.name)}</div>
-                <div class="blog-tool-card__models">${escHtml(t.models)}</div>
-                <p class="blog-tool-card__role">${escHtml(t.role)}</p>
-              </div>
-            `).join('')}
-          </div>`;
-
-      case 'video':
-        return `
-          <div class="blog-video">
-            <iframe src="${escHtml(section.src)}" title="${escHtml(section.title || '')}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-          </div>`;
-
-      default:
-        return '';
-    }
-  }
-
-  renderEvolution() {
-    const showTimeline = this.state.evoTimelineExpanded;
-    const timelineRows = PROJECT_TIMELINE.map((t, i) => {
-      const tagCls = t.tag === 'pivot' ? 'evo-tl__tag--pivot' : t.tag === 'decision' ? 'evo-tl__tag--decision' : '';
-      const tagLabel = t.tag === 'pivot' ? '↩ pivot' : t.tag === 'decision' ? '✓ decision' : '';
-      return `<tr class="evo-tl__row ${tagCls}">
-        <td class="evo-tl__num">${i + 1}</td>
-        <td class="evo-tl__step">${escHtml(t.step)}${tagLabel ? `<span class="evo-tl__tag ${tagCls}">${tagLabel}</span>` : ''}</td>
-        <td class="evo-tl__detail">${escHtml(t.detail)}</td>
-        <td class="evo-tl__models">${escHtml(t.models)}</td>
-      </tr>`;
-    }).join('');
-
-    const articleBody = ARTICLE_SECTIONS.map(s => this._renderArticleSection(s)).join('');
-
-    return `
-      <article class="blog-article">
-        <nav class="blog-back-nav">
-          <button class="btn btn--ghost" id="blog-back-home">← Back to Home</button>
-        </nav>
-
-        ${articleBody}
-
-        <details class="blog-timeline-details" ${showTimeline ? 'open' : ''}>
-          <summary class="blog-timeline-summary">Project Timeline — All 14 Steps</summary>
-          <div class="blog-timeline-content">
-            <table class="evo-tl__table">
-              <thead><tr>
-                <th class="evo-tl__th">#</th>
-                <th class="evo-tl__th">Step</th>
-                <th class="evo-tl__th">What happened</th>
-                <th class="evo-tl__th">Models</th>
-              </tr></thead>
-              <tbody>${timelineRows}</tbody>
-            </table>
-          </div>
-        </details>
-
-        <footer class="blog-footer">
-          <div class="blog-divider"></div>
-          <p class="blog-footer__text">Built with Cursor, Claude Code, GPT Codex, Gemini CLI, and a lot of model-swapping.</p>
-          <button class="btn btn--primary btn--lg" id="blog-see-demo">See the Demo</button>
-        </footer>
-      </article>
-    `;
-  }
-
-  _exitEvolution({ silent = false } = {}) {
-    this.state.showEvolution = false;
-    this.state.hasStarted = false;
-    this._syncGlobal();
-    if (this._evoKeyHandler) { document.removeEventListener('keydown', this._evoKeyHandler); this._evoKeyHandler = null; }
-    if (this._evoLightboxKeyHandler) { document.removeEventListener('keydown', this._evoLightboxKeyHandler); this._evoLightboxKeyHandler = null; }
-    if (!silent) this.rerender();
-  }
-
-  _attachEvolutionListeners() {
-    document.getElementById('blog-back-home')?.addEventListener('click', () => {
-      this._exitEvolution();
-    });
-
-    document.getElementById('blog-see-demo')?.addEventListener('click', () => {
-      this._exitEvolution({ silent: true });
-      this.loadDemo();
-    });
-
-    const blogFigures = document.querySelectorAll('.blog-figure[data-lightbox-src]');
-    const allImages = Array.from(blogFigures).map(fig => ({
-      src: fig.getAttribute('data-lightbox-src'),
-      label: fig.querySelector('.blog-figure__text')?.textContent || '',
-      original: null,
-    }));
-
-    blogFigures.forEach((fig, i) => {
-      fig.addEventListener('click', () => {
-        this._lightboxItems = allImages;
-        this._lightboxIdx = i;
-        this._skipLens = true;
-        const item = allImages[i];
-        this._openLightbox(item.src, item.label, null);
-      });
-    });
-
-    const handler = (e) => {
-      if (!this.state.showEvolution) return;
-      const lightboxOpen = document.querySelector('.lightbox-overlay--visible');
-      if (e.key === 'Escape') {
-        if (lightboxOpen) {
-          this._closeLightbox();
-        } else {
-          this._exitEvolution();
-        }
-        return;
-      }
-      if (lightboxOpen && this._lightboxItems?.length > 1) {
-        if (e.key === 'ArrowRight') {
-          e.preventDefault();
-          e.stopImmediatePropagation();
-          const len = this._lightboxItems.length;
-          this._lightboxIdx = (this._lightboxIdx + 1) % len;
-          const next = this._lightboxItems[this._lightboxIdx];
-          this._openLightbox(next.src, next.label, next.original);
-        } else if (e.key === 'ArrowLeft') {
-          e.preventDefault();
-          e.stopImmediatePropagation();
-          const len = this._lightboxItems.length;
-          this._lightboxIdx = (this._lightboxIdx - 1 + len) % len;
-          const prev = this._lightboxItems[this._lightboxIdx];
-          this._openLightbox(prev.src, prev.label, prev.original);
-        }
-      }
-    };
-
-    if (this._evoKeyHandler) document.removeEventListener('keydown', this._evoKeyHandler);
-    this._evoKeyHandler = handler;
-    document.addEventListener('keydown', handler);
   }
 
   // ---- STEP 0: SELECT IMAGE ----
