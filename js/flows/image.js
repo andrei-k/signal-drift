@@ -220,33 +220,24 @@ export class ImageFlow {
     const canNext = !!(this.currentImageSrc);
     const nav = renderNav({ canGoBack: false, canGoNext: canNext, nextLabel: 'Next Step' });
 
-    const sampleGrid = SAMPLE_IMAGES.map(img => {
-      const isSelected = this.state.selectedImage?.id === img.id;
-      return `
-      <button class="image-card ${isSelected ? 'image-card--selected' : ''}"
-        data-sample-id="${img.id}" aria-label="Select image ${img.id}" aria-pressed="${isSelected}">
-        <div class="image-card__img-wrap">
-          <img src="${img.path}" alt="Sample image" class="image-card__img" loading="lazy">
-          ${isSelected ? `<div class="image-card__check" aria-hidden="true">✓</div>` : ''}
-        </div>
-      </button>
-    `}).join('');
-
-    const selectionStatus = this.currentImageSrc
-      ? `<div class="selection-confirm">✓ Image selected. Click <em>Next Step</em> to continue</div>`
-      : `<div class="selection-prompt">Click an image below to select it, then continue</div>`;
-
     return `
       <div class="wizard-step">
         ${indicator}
         <div class="step-content card">
-          <h2 class="step-title">Choose an Image</h2>
-          <p class="step-desc">Click any image to select it. We'll ask an AI model to describe it, then ask an AI tool to recreate it, and compare what survives.</p>
-
-          ${selectionStatus}
+          <h2 class="step-title">Upload an Image</h2>
+          <p class="step-desc">Upload any image. We'll ask an AI model to describe it, then ask an AI tool to recreate it, and compare what survives.</p>
 
           <div class="field-group">
-            <div class="image-grid">${sampleGrid}</div>
+            <label class="upload-zone upload-zone--source ${this.currentImageSrc ? 'upload-zone--active' : ''}" for="source-upload" tabindex="0" role="button" aria-label="Upload source image">
+              ${this.currentImageSrc
+                ? `<img src="${this.currentImageSrc}" class="upload-zone__preview" alt="Selected image">`
+                : `<div class="upload-zone__placeholder">
+                    <span class="upload-zone__icon">📷</span>
+                    <span class="upload-zone__hint">Drag & drop or click to upload an image</span>
+                  </div>`
+              }
+              <input type="file" id="source-upload" accept="image/*" class="upload-zone__input" aria-label="Upload source image file">
+            </label>
           </div>
 
         </div>
@@ -256,17 +247,35 @@ export class ImageFlow {
   }
 
   _attachSelectListeners() {
-    document.querySelectorAll('.image-card').forEach(card => {
-      card.addEventListener('click', () => {
-        const id = card.getAttribute('data-sample-id');
-        this.state.selectedImage = SAMPLE_IMAGES.find(s => s.id === id);
-        this.rerender();
-      });
+    const sourceUpload = document.getElementById('source-upload');
+    const sourceZone = document.querySelector('.upload-zone--source');
+
+    sourceUpload?.addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (file) this._readSourceFile(file);
+    });
+
+    sourceZone?.addEventListener('dragover', e => { e.preventDefault(); sourceZone.classList.add('upload-zone--dragover'); });
+    sourceZone?.addEventListener('dragleave', () => sourceZone.classList.remove('upload-zone--dragover'));
+    sourceZone?.addEventListener('drop', e => {
+      e.preventDefault();
+      sourceZone.classList.remove('upload-zone--dragover');
+      const file = e.dataTransfer.files[0];
+      if (file && file.type.startsWith('image/')) this._readSourceFile(file);
     });
 
     attachNavListeners(null, () => {
       if (this.currentImageSrc) { this.state.currentStep = 1; this.rerender(); }
     });
+  }
+
+  _readSourceFile(file) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      this.state.selectedImage = { id: 'upload', path: e.target.result };
+      this.rerender();
+    };
+    reader.readAsDataURL(file);
   }
 
   // ---- STEP 1: DESCRIBE ----
