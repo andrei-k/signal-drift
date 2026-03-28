@@ -127,7 +127,7 @@ export class ImageFlow {
     this.globalState.isDemoLoaded = this.state.isDemoLoaded;
   }
 
-  loadDemo() {
+  loadDemo(tab) {
     const demo = DEMO_IMAGE_CHAINS;
     this.state.hasStarted = true;
     this.state.currentStep = 3;
@@ -138,7 +138,7 @@ export class ImageFlow {
     this.state.expandedDescription = -1;
     this.state.demoPage = 0;
     this.state.sgPage = 0;
-    this.state.activeTab = this.state.activeTab || 'samePrompt';
+    this.state.activeTab = tab || 'samePrompt';
 
     const sp = demo.samePrompt;
     const sg = demo.sameGenerator;
@@ -190,14 +190,17 @@ export class ImageFlow {
         <div class="welcome-hero">
           <h2 class="welcome-title">The Visual Telephone Game</h2>
           <p class="welcome-tagline">Same image. Same instructions. Different models. Different results.</p>
-          <p class="welcome-subtitle">AI models don't just have different abilities, they have different <em>perspectives</em>.</p>
+          <p class="welcome-subtitle">See what gets lost, changed, and invented when AI describes and recreates your photos.</p>
         </div>
 
         <div class="welcome-cta">
-          <a class="btn btn--ghost btn--lg" href="https://12ak.com/posts/how-i-built-signal-drift/" target="_blank" rel="noopener">Behind the Scenes</a>
-          <button class="btn btn--primary btn--lg" id="welcome-demo">See the Demo</button>
-          <button class="btn btn--secondary btn--lg" id="welcome-start">Start Your Own</button>
+          <button class="btn btn--ghost btn--lg" id="welcome-demo-sp">Demo: Same Prompt</button>
+          <button class="btn btn--ghost btn--lg" id="welcome-demo-sg">Demo: Same Generator</button>
         </div>
+        <div class="welcome-cta-start">
+          <button class="btn btn--primary btn--lg" id="welcome-start">Start Your Own</button>
+        </div>
+        <p class="welcome-link"><a href="https://12ak.com/posts/how-i-built-signal-drift/" target="_blank" rel="noopener">How I Built Signal Drift &rarr;</a></p>
       </section>
     `;
   }
@@ -209,8 +212,11 @@ export class ImageFlow {
       this._syncGlobal();
       this.rerender();
     });
-    document.getElementById('welcome-demo')?.addEventListener('click', () => {
-      this.loadDemo();
+    document.getElementById('welcome-demo-sp')?.addEventListener('click', () => {
+      this.loadDemo('samePrompt');
+    });
+    document.getElementById('welcome-demo-sg')?.addEventListener('click', () => {
+      this.loadDemo('sameGenerator');
     });
   }
 
