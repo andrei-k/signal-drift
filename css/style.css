@@ -2257,3 +2257,13 @@ details[open] .about-toggle::before { transform: rotate(90deg); }
   border-top: 1px solid var(--color-border);
   margin-top: var(--space-2xl);
 }
+
+.app-footer a {
+  color: var(--color-text-subtle);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.app-footer a:hover {
+  color: var(--color-text);
+}

@@ -13,7 +13,7 @@ let suppressRouteSync = false;
 function render() {
   const main = document.getElementById('app-main');
   main.classList.toggle('wide', imageFlow?.state.currentStep === 3);
-  main.innerHTML = imageFlow.render() + `<footer class="app-footer"><p>SignalDrift: see how meaning drifts when AI models describe and recreate your world.</p></footer>`;
+  main.innerHTML = imageFlow.render() + `<footer class="app-footer"><p>SignalDrift: see how meaning drifts when AI models describe and recreate your world.</p><p><a href="https://github.com/andrei-k/signal-drift" target="_blank" rel="noopener noreferrer">View on GitHub</a></p></footer>`;
   imageFlow.attachListeners();
   updateHeaderTabs();
 }

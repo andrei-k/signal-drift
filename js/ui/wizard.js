@@ -3,7 +3,7 @@ export function renderStepIndicator(currentStep, steps) {
     let cls = 'step-indicator__item';
     if (i < currentStep) cls += ' completed';
     else if (i === currentStep) cls += ' active';
-    return `<div class="${cls}"><span class="step-indicator__dot"></span><span class="step-indicator__label">${s.label}</span></div>`;
+    return `<div class="${cls}"><span class="step-indicator__dot">${i + 1}</span><span class="step-indicator__label">${s.label}</span></div>`;
   }).join('<div class="step-indicator__line"></div>');
   return `<nav class="step-indicator" aria-label="Progress">${items}</nav>`;
 }

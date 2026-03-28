@@ -190,7 +190,7 @@ export class ImageFlow {
         <div class="welcome-hero">
           <h2 class="welcome-title">The Visual Telephone Game</h2>
           <p class="welcome-tagline">Same image. Same instructions. Different models. Different results.</p>
-          <p class="welcome-subtitle">AI models don't just have different abilities — they have different <em>perspectives</em>.</p>
+          <p class="welcome-subtitle">AI models don't just have different abilities, they have different <em>perspectives</em>.</p>
         </div>
 
         <div class="welcome-cta">

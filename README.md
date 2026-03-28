@@ -2,33 +2,38 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-**How AI models distort visual information, a game of telephone with pictures.**
+**A visual game of telephone that reveals how AI models quietly edit reality.**
 
-Signal Drift is an interactive web app that shows how different AI models interpret and recreate the same image. You feed a photo through multiple models and watch each one reshape reality in its own way. One tidies up the mess, another invents rain for dramatic effect, a third tries to label every pixel.
+AI models don't just generate images differently; they *see* differently. Signal Drift is an interactive tool that feeds the same photo through multiple AI models and lets you compare the results side by side. What comes back is never quite what went in.
 
-Built entirely with AI (Claude, ChatGPT, Gemini, Copilot, and others) as an exploration of the multi-model approach.
+**[Try the live demo](https://andrei-k.github.io/signal-drift/#/)**
 
-## Live Demo
+![Signal Drift demo showing a child's drawing described by three different AI models and recreated by ChatGPT, each producing a different interpretation](images/demo-screenshot.png)
 
-**[https://andrei-k.github.io/signal-drift/#/](https://andrei-k.github.io/signal-drift/#/)**
+## Why This Matters
+
+When an AI model describes your photo and another model recreates it, the output looks plausible. But without the original to compare against, you'd never notice what was quietly changed. This isn't hallucination (obvious errors). It's editorialization: invisible decisions about what to keep, erase, and invent.
+
+Signal Drift makes those invisible decisions visible.
 
 ## How It Works
 
-The app runs two experiments side by side:
+The app includes a built-in demo you can explore immediately, and a wizard that lets you upload your own photos and run the experiments yourself. Each image is put through two controlled experiments:
 
-| Mode | What happens |
-|---|---|
-| **Same Prompt** | One detailed description of a photo is sent to three different image generators (ChatGPT, Copilot, Gemini). Same input, different outputs. |
-| **Same Generator** | Three different models describe the same photo. All three descriptions are fed into one generator (ChatGPT). Different inputs, same engine. |
+| Experiment | Setup | What it isolates |
+|---|---|---|
+| **Same Prompt** | One description sent to three generators (ChatGPT, Copilot, Gemini) | How generators interpret identical instructions differently |
+| **Same Generator** | Three models describe the same photo, all fed into one generator (ChatGPT) | How a model's choice of words reshapes the final image |
 
-The results reveal consistent "personalities." ChatGPT over-specifies, Copilot sanitizes, Gemini dramatizes. It raises questions about silent editorial bias in AI outputs.
+Each model drifts in a consistent direction:
+- **ChatGPT** tries to inventory everything, writing exhaustive descriptions that over-specify details
+- **Copilot** tidies and sanitizes, replacing mess with clean structure
+- **Gemini** captures mood and energy, sometimes inventing atmospheric details (like adding rain to a dry street)
 
-## Tech Stack
+## Read More
 
-- **Vanilla JavaScript**, ES modules, no framework, no build step
-- **Single HTML entry point**, `index.html`
-- **CSS custom properties**, dark theme with model-specific accent colors
-- **Canvas particle system**, animated background
+- [How I Built Signal Drift](https://12ak.com/posts/how-i-built-signal-drift/) — the full build story, from multi-model ideation to the pivot from text to images
+- [AI Doesn't Hallucinate Your Photos. It Edits Them.](https://12ak.com/posts/what-ai-sees/) — detailed analysis of cultural erasure, privacy enforcement, and creative liberty across models
 
 ## Running Locally
 
@@ -40,36 +45,13 @@ python3 -m http.server 8080
 
 Then open [http://localhost:8080](http://localhost:8080).
 
-## Project Structure
+## Tech Stack
 
-```
-├── index.html
-├── css/style.css
-├── js/
-│   ├── app.js                  # Bootstrap, state, render loop
-│   ├── bg.js                   # Canvas background & particle system
-│   ├── router.js               # Hash-based routing
-│   ├── flows/
-│   │   ├── image.js            # Image drift flow, wizard, demos
-│   │   └── translation.js      # Translation drift flow
-│   ├── data/
-│   │   ├── demo-image.js       # Image descriptions & model chains
-│   │   └── demo-translation.js # Translation demo data
-│   ├── analysis/
-│   │   ├── parser.js           # Analysis data parser
-│   │   └── renderer.js         # Analysis visualization
-│   └── ui/
-│       ├── models.js           # Model colors & metadata
-│       └── wizard.js           # Step indicator renderers
-└── images/
-    ├── demo-1/                 # Same-prompt demo images
-    └── demo-2/                 # Same-generator demo images
-```
+- Vanilla JavaScript, ES modules, no framework, no build step
+- Single HTML entry point
+- CSS custom properties, dark theme with model-specific accent colors
+- Canvas particle system for animated background
 
 ## Contributing
 
 Contributions are welcome. Open an issue or submit a pull request.
-
-## Origin
-
-Signal Drift was built for a [Concordia University Digital Skill-Share Days](https://sites.events.concordia.ca/sites/concordia/en/digital-skills-share-2026/) lightning talk. It now lives as a standalone open-source tool. For the full story (how it was ideated across four models, prototyped in parallel, and pivoted from text to images), check out the write-up: **[How I Built Signal Drift](https://12ak.com/posts/how-i-built-signal-drift/)**
