@@ -229,6 +229,7 @@ export class ImageFlow {
     document.getElementById('welcome-start')?.addEventListener('click', () => {
       this.state.hasStarted = true;
       this.state.currentStep = 0;
+      this.state.selectedImage = null;
       this._syncGlobal();
       this.rerender();
     });
@@ -569,6 +570,7 @@ export class ImageFlow {
 
         <div class="comparison-actions">
           <button class="btn btn--secondary" id="comp-back">← Back</button>
+          <button class="btn btn--ghost" id="export-comparison">Export as Image</button>
           <button class="btn btn--primary" id="new-chain">Start Over</button>
         </div>
       </div>
@@ -769,6 +771,7 @@ export class ImageFlow {
         </div>
 
         <div class="comparison-actions">
+          <button class="btn btn--ghost" id="export-comparison">Export as Image</button>
           <button class="btn btn--primary" id="new-chain">Try It Yourself</button>
         </div>
       </div>
@@ -793,6 +796,10 @@ export class ImageFlow {
         activeTab: 'samePrompt',
       };
       this.rerender();
+    });
+
+    document.getElementById('export-comparison')?.addEventListener('click', () => {
+      this._exportComparison();
     });
 
     document.querySelectorAll('.desc-toggle-btn').forEach(btn => {
@@ -878,6 +885,96 @@ export class ImageFlow {
     document.addEventListener('keydown', this._demoPagerKeyHandler);
 
     this._attachCopyButtons();
+  }
+
+  async _exportComparison() {
+    const showcase = document.querySelector('.demo-section[style=""] .demo-showcase') ||
+                     document.querySelector('.demo-showcase') ||
+                     document.querySelector('.image-sbs');
+    if (!showcase) return;
+
+    const imgEls = showcase.querySelectorAll('img');
+    if (!imgEls.length) return;
+
+    // Load all images
+    const loadImg = (src) => new Promise((resolve) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => resolve(img);
+      img.onerror = () => resolve(null);
+      img.src = src;
+    });
+
+    const images = [];
+    const labels = [];
+
+    // Collect images and labels from the visible showcase
+    const cards = showcase.querySelectorAll('.demo-card, .image-sbs__col');
+    for (const card of cards) {
+      const img = card.querySelector('img');
+      if (!img) continue;
+      const headerEl = card.querySelector('.demo-card__header, .col-header');
+      let label = 'Image';
+      if (headerEl) {
+        label = headerEl.textContent.trim().replace(/\s+/g, ' ');
+      }
+      const loaded = await loadImg(img.src);
+      if (loaded) {
+        images.push(loaded);
+        labels.push(label);
+      }
+    }
+
+    if (!images.length) return;
+
+    const padding = 24;
+    const labelHeight = 36;
+    const thumbSize = 320;
+    const cols = images.length;
+    const canvasW = cols * thumbSize + (cols + 1) * padding;
+    const canvasH = thumbSize + labelHeight + padding * 3 + 40; // extra for branding
+
+    const canvas = document.createElement('canvas');
+    canvas.width = canvasW;
+    canvas.height = canvasH;
+    const ctx = canvas.getContext('2d');
+
+    // Background
+    ctx.fillStyle = '#0b0c0e';
+    ctx.fillRect(0, 0, canvasW, canvasH);
+
+    // Draw images with labels
+    ctx.font = 'bold 14px sans-serif';
+    ctx.textAlign = 'center';
+    for (let i = 0; i < images.length; i++) {
+      const x = padding + i * (thumbSize + padding);
+      const y = padding;
+
+      // Label
+      ctx.fillStyle = '#96a1ab';
+      ctx.fillText(labels[i], x + thumbSize / 2, y + 14, thumbSize);
+
+      // Image (fit to square)
+      const img = images[i];
+      const scale = Math.min(thumbSize / img.width, thumbSize / img.height);
+      const w = img.width * scale;
+      const h = img.height * scale;
+      const ix = x + (thumbSize - w) / 2;
+      const iy = y + labelHeight + (thumbSize - h) / 2;
+      ctx.drawImage(img, ix, iy, w, h);
+    }
+
+    // Branding
+    ctx.fillStyle = '#4b5159';
+    ctx.font = '12px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('SignalDrift: the visual telephone game', canvasW / 2, canvasH - 14);
+
+    // Download
+    const link = document.createElement('a');
+    link.download = 'signal-drift-comparison.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
   }
 
   _openLightbox(src, label, originalSrc) {
