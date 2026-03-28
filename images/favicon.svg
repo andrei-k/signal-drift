@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <style>
+    .frame { fill: #f97316; }
+    @media (prefers-color-scheme: light) {
+      .frame { fill: #ea580c; }
+    }
+  </style>
+  <rect class="frame" x="3" y="5" width="17" height="17" rx="3" opacity="0.45"/>
+  <rect class="frame" x="12" y="10" width="17" height="17" rx="3" opacity="0.85"/>
+</svg>
