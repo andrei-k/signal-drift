@@ -1,18 +1,14 @@
 /* === RESET & BASE === */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { font-size: 17px; scroll-behavior: smooth; overflow-x: hidden; }
+html { font-size: 17px; scroll-behavior: smooth; }
 body {
   font-family: var(--font-sans);
   background: var(--color-bg);
   color: var(--color-text);
   line-height: 1.6;
   min-height: 100vh;
-  overflow-x: hidden;
 }
 
-body:has(.welcome-view) {
-  overflow-y: hidden;
-}
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
   letter-spacing: -0.02em;
@@ -91,6 +87,7 @@ h1, h2, h3, h4, h5, h6 {
 /* === LAYOUT === */
 #app {
   min-height: 100vh;
+  min-width: 500px;
   display: flex;
   flex-direction: column;
 }
@@ -98,7 +95,8 @@ h1, h2, h3, h4, h5, h6 {
 .app-header {
   background: rgb(24, 24, 27);
   border-bottom: 2px solid var(--color-accent);
-  padding: var(--space-md) var(--space-xl);
+  padding: 0 var(--space-xl);
+  height: 3.2rem;
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
@@ -994,8 +992,8 @@ mark.annotation:hover, mark.annotation:focus {
 
 .section-tab {
   position: relative;
-  padding: 0.5rem 1.3rem;
-  font-size: 0.88rem;
+  padding: 0.35rem 1rem;
+  font-size: 0.78rem;
   font-weight: 600;
   letter-spacing: 0.01em;
   cursor: pointer;
@@ -2038,74 +2036,6 @@ details[open] .about-toggle::before { transform: rotate(90deg); }
 }
 
 /* === OBSERVATIONS BUTTON & PANEL === */
-.lightbox__obs-btn {
-  background: rgba(251, 191, 36, 0.15);
-  color: #fbbf24;
-  border: 1px solid rgba(251, 191, 36, 0.4);
-  border-radius: 6px;
-  padding: 6px 14px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.15s ease, transform 0.1s ease, border-color 0.15s ease;
-  user-select: none;
-  -webkit-user-select: none;
-  letter-spacing: 0.03em;
-}
-.lightbox__obs-btn:hover {
-  background: rgba(251, 191, 36, 0.25);
-}
-.lightbox__obs-btn--active {
-  background: rgba(251, 191, 36, 0.3);
-  border-color: rgba(251, 191, 36, 0.7);
-}
-
-.lightbox__img-container--obs-active > .lightbox__img {
-  filter: blur(14px) brightness(0.35);
-  transition: filter 0.35s ease;
-}
-.lightbox__img-container--obs-active > .lightbox__lens {
-  opacity: 0 !important;
-}
-.lightbox__img-container--obs-active {
-  cursor: default !important;
-}
-.lightbox__img-container--obs-active .lightbox__obs-panel {
-  cursor: default;
-}
-
-.lightbox__obs-panel {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 48px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-  z-index: 18;
-}
-.lightbox__obs-panel--visible {
-  opacity: 1;
-  pointer-events: auto;
-}
-.lightbox__obs-items {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  max-width: 680px;
-}
-.lightbox__obs-item {
-  margin: 0;
-  color: #f1f5f9;
-  font-size: 1.15rem;
-  line-height: 1.65;
-  padding-left: 18px;
-  border-left: 3px solid rgba(251, 191, 36, 0.6);
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
-}
-
 .lightbox__close {
   position: absolute;
   top: -40px;
@@ -2198,7 +2128,7 @@ details[open] .about-toggle::before { transform: rotate(90deg); }
   left: 50%;
   transform: translateX(-50%);
   width: max-content;
-  max-width: 300px;
+  max-width: min(300px, 90vw);
   min-width: 220px;
   background: var(--color-surface);
   color: var(--color-text);
@@ -2231,8 +2161,8 @@ details[open] .about-toggle::before { transform: rotate(90deg); }
 }
 
 @keyframes tipFadeIn {
-  from { opacity: 0; transform: translateX(-50%) translateY(4px); }
-  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 .model-tip__role {

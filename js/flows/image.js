@@ -1,6 +1,6 @@
 import { renderStepIndicator, renderNav, attachNavListeners } from '../ui/wizard.js';
 import { MODELS, getModel } from '../ui/models.js';
-import { SAMPLE_IMAGES, DEMO_IMAGE_CHAINS, IMAGE_OBSERVATIONS } from '../data/demo-image.js';
+import { SAMPLE_IMAGES, DEMO_IMAGE_CHAINS } from '../data/demo-image.js';
 
 
 const IMAGE_STEPS = [
@@ -120,6 +120,26 @@ export class ImageFlow {
       case 2: this._attachGenerateListeners(); break;
       case 3: this._attachComparisonListeners(); break;
     }
+    document.querySelectorAll('.model-tip').forEach(tip => {
+      tip.addEventListener('mouseenter', () => {
+        const bubble = tip.querySelector('.model-tip__bubble');
+        if (!bubble) return;
+        bubble.style.left = '';
+        bubble.style.right = '';
+        bubble.style.transform = '';
+        requestAnimationFrame(() => {
+          const rect = bubble.getBoundingClientRect();
+          if (rect.left < 8) {
+            bubble.style.left = '0';
+            bubble.style.transform = 'none';
+          } else if (rect.right > window.innerWidth - 8) {
+            bubble.style.left = 'auto';
+            bubble.style.right = '0';
+            bubble.style.transform = 'none';
+          }
+        });
+      });
+    });
   }
 
   _syncGlobal() {
@@ -706,7 +726,7 @@ export class ImageFlow {
           </div>
 
           <div class="comparison-takeaway">
-            <p>Same words in. Different worlds out. The generator doesn't just follow instructions — it interprets them.</p>
+            <p>Same words in. Different worlds out. The generator doesn't just follow instructions, it interprets them.</p>
           </div>
         </div>
 
@@ -744,7 +764,7 @@ export class ImageFlow {
           </div>
 
           <div class="comparison-takeaway">
-            <p>Every model edits what it sees. The question isn't whether your AI changes the picture — it's whether you notice.</p>
+            <p>Every model edits what it sees. The question isn't if your AI changes the picture, it's whether you notice.</p>
           </div>
         </div>
 
@@ -818,7 +838,6 @@ export class ImageFlow {
             src,
             label: el.getAttribute('data-lightbox-label') || '',
             original: el.getAttribute('data-lightbox-original') || null,
-            observations: IMAGE_OBSERVATIONS[src] || null,
           };
         });
 
@@ -861,19 +880,9 @@ export class ImageFlow {
     this._attachCopyButtons();
   }
 
-  _getObservations(src) {
-    if (!src) return null;
-    const obs = IMAGE_OBSERVATIONS[src];
-    if (obs && obs.length) return obs;
-    const item = this._lightboxItems?.[this._lightboxIdx];
-    if (item?.observations?.length) return item.observations;
-    return null;
-  }
-
   _openLightbox(src, label, originalSrc) {
     const hasOriginal = originalSrc && originalSrc !== src;
     const hasNav = this._lightboxItems && this._lightboxItems.length > 1;
-    const observations = this._getObservations(src);
 
     const existing = document.querySelector('.lightbox-overlay--visible');
     if (existing) {
@@ -889,21 +898,6 @@ export class ImageFlow {
         if (toggleBtn) toggleBtn.textContent = 'Click to compare original';
         const lens = existing.querySelector('.lightbox__lens');
         if (lens) lens.classList.remove('lightbox__lens--active');
-        const obsBtn = existing.querySelector('.lightbox__obs-btn');
-        const obsPanel = existing.querySelector('.lightbox__obs-panel');
-        const existingContainer = existing.querySelector('.lightbox__img-container');
-        existingContainer?.classList.remove('lightbox__img-container--obs-active');
-        if (obsBtn && obsPanel) {
-          obsPanel.classList.remove('lightbox__obs-panel--visible');
-          obsBtn.classList.remove('lightbox__obs-btn--active');
-          if (observations?.length) {
-            obsBtn.style.display = '';
-            obsPanel.querySelector('.lightbox__obs-items').innerHTML =
-              observations.map(o => `<p class="lightbox__obs-item">${escHtml(o)}</p>`).join('');
-          } else {
-            obsBtn.style.display = 'none';
-          }
-        }
         return;
       }
       existing.remove();
@@ -923,14 +917,10 @@ export class ImageFlow {
           <img src="${src}" alt="${escAttr(label)}" class="lightbox__img lightbox__img--generated">
           ${hasOriginal ? `<img src="${originalSrc}" alt="Original" class="lightbox__img lightbox__img--original">` : ''}
           <div class="lightbox__lens"></div>
-          <div class="lightbox__obs-panel"><div class="lightbox__obs-items">
-            ${observations ? observations.map(o => `<p class="lightbox__obs-item">${escHtml(o)}</p>`).join('') : ''}
-          </div></div>
         </div>
         <div class="lightbox__caption-bar">
           ${label ? `<span class="lightbox__caption">${escHtml(label)}</span>` : ''}
           ${hasOriginal ? `<button class="lightbox__toggle-btn" aria-label="Toggle original image">Click to compare original</button>` : ''}
-          <button class="lightbox__obs-btn" aria-label="Show observations" ${observations ? '' : 'style="display:none"'}>Signal Lost</button>
         </div>
       </div>
     `;
@@ -956,18 +946,6 @@ export class ImageFlow {
         this._lightboxIdx = (this._lightboxIdx + 1) % len;
         const item = this._lightboxItems[this._lightboxIdx];
         this._openLightbox(item.src, item.label, item.original);
-      });
-    }
-
-    const obsBtn = overlay.querySelector('.lightbox__obs-btn');
-    const obsPanel = overlay.querySelector('.lightbox__obs-panel');
-    const imgContainer = overlay.querySelector('.lightbox__img-container');
-    if (obsBtn && obsPanel) {
-      obsBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const visible = obsPanel.classList.toggle('lightbox__obs-panel--visible');
-        obsBtn.classList.toggle('lightbox__obs-btn--active', visible);
-        imgContainer?.classList.toggle('lightbox__img-container--obs-active', visible);
       });
     }
 

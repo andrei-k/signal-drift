@@ -32,8 +32,8 @@ Each model drifts in a consistent direction:
 
 ## Read More
 
-- [How I Built Signal Drift](https://12ak.com/posts/how-i-built-signal-drift/) — the full build story, from multi-model ideation to the pivot from text to images
-- [AI Doesn't Hallucinate Your Photos. It Edits Them.](https://12ak.com/posts/what-ai-sees/) — detailed analysis of cultural erasure, privacy enforcement, and creative liberty across models
+- [How I Built Signal Drift](https://12ak.com/posts/how-i-built-signal-drift/): the full build story, from multi-model ideation to the pivot from text to images
+- [AI Doesn't Hallucinate Your Photos. It Edits Them.](https://12ak.com/posts/what-ai-sees/): detailed analysis of cultural erasure, privacy enforcement, and creative liberty across models
 
 ## Running Locally
 
