@@ -1,4 +1,4 @@
-import { ImageFlow } from './flows/image.js';
+import { ImageFlow } from './image.js';
 import { initBackground } from './bg.js';
 import { initRouter, onNavigate, navigate, replaceRoute, currentRoute } from './router.js';
 

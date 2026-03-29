@@ -252,7 +252,7 @@ const PH = null;
 
 function makeGenerators(img1, img2, img3) {
   return [
-    { generationTool: 'gpt-image', generationToolName: 'ChatGPT (GPT Image)', generatedImagePath: img1, isControl: true },
+    { generationTool: 'gpt-image', generationToolName: 'GPT Image', generatedImagePath: img1, isControl: true },
     { generationTool: 'copilot-designer', generationToolName: 'Copilot Designer', generatedImagePath: img2 },
     { generationTool: 'nano-banana', generationToolName: 'Nano Banana Pro', generatedImagePath: img3 },
   ];
@@ -281,10 +281,10 @@ export const DEMO_IMAGE_CHAINS = {
   },
 
   // Section 2: Different Descriptions, Same Generator
-  // 3 models describe each image; ChatGPT (GPT Image) generates all
+  // 3 models describe each image; GPT Image generates all
   sameGenerator: {
     generationTool: 'gpt-image',
-    generationToolName: 'ChatGPT (GPT Image)',
+    generationToolName: 'GPT Image',
     rows: [
       {
         originalImagePath: 'images/demo-2/demo-2-a.jpg',
