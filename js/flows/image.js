@@ -220,7 +220,10 @@ export class ImageFlow {
         <div class="welcome-cta-start">
           <button class="btn btn--primary btn--lg" id="welcome-start">Start Your Own</button>
         </div>
-        <p class="welcome-link"><a href="https://12ak.com/posts/how-i-built-signal-drift/" target="_blank" rel="noopener">How I Built Signal Drift &rarr;</a></p>
+        <div class="welcome-links">
+          <p class="welcome-link"><a href="https://12ak.com/posts/what-ai-sees/" target="_blank" rel="noopener">AI Doesn't Hallucinate Your Photos. It Edits Them. &rarr;</a></p>
+          <p class="welcome-link"><a href="https://12ak.com/posts/how-i-built-signal-drift/" target="_blank" rel="noopener">How I Built Signal Drift &rarr;</a></p>
+        </div>
       </section>
     `;
   }
@@ -770,8 +773,9 @@ export class ImageFlow {
           </div>
         </div>
 
+        <p class="welcome-link" style="text-align:center;margin-top:var(--space-lg)"><a href="https://12ak.com/posts/what-ai-sees/" target="_blank" rel="noopener">Read the full analysis &rarr;</a></p>
+
         <div class="comparison-actions">
-          <button class="btn btn--ghost" id="export-comparison">Export as Image</button>
           <button class="btn btn--primary" id="new-chain">Try It Yourself</button>
         </div>
       </div>
@@ -888,15 +892,13 @@ export class ImageFlow {
   }
 
   async _exportComparison() {
-    const showcase = document.querySelector('.demo-section[style=""] .demo-showcase') ||
-                     document.querySelector('.demo-showcase') ||
-                     document.querySelector('.image-sbs');
-    if (!showcase) return;
+    const chain = this.state.chain;
+    const descModel = getModel(chain.descriptionModel);
+    const genTool = getGenTool(chain.generationTool);
+    const origSrc = this.currentImageSrc;
+    const genSrc = chain.generatedImageDataUrl;
+    if (!origSrc || !genSrc) return;
 
-    const imgEls = showcase.querySelectorAll('img');
-    if (!imgEls.length) return;
-
-    // Load all images
     const loadImg = (src) => new Promise((resolve) => {
       const img = new Image();
       img.crossOrigin = 'anonymous';
@@ -905,34 +907,14 @@ export class ImageFlow {
       img.src = src;
     });
 
-    const images = [];
-    const labels = [];
+    const [origImg, genImg] = await Promise.all([loadImg(origSrc), loadImg(genSrc)]);
+    if (!origImg || !genImg) return;
 
-    // Collect images and labels from the visible showcase
-    const cards = showcase.querySelectorAll('.demo-card, .image-sbs__col');
-    for (const card of cards) {
-      const img = card.querySelector('img');
-      if (!img) continue;
-      const headerEl = card.querySelector('.demo-card__header, .col-header');
-      let label = 'Image';
-      if (headerEl) {
-        label = headerEl.textContent.trim().replace(/\s+/g, ' ');
-      }
-      const loaded = await loadImg(img.src);
-      if (loaded) {
-        images.push(loaded);
-        labels.push(label);
-      }
-    }
-
-    if (!images.length) return;
-
-    const padding = 24;
-    const labelHeight = 36;
-    const thumbSize = 320;
-    const cols = images.length;
-    const canvasW = cols * thumbSize + (cols + 1) * padding;
-    const canvasH = thumbSize + labelHeight + padding * 3 + 40; // extra for branding
+    const cellSize = 1024;
+    const gap = 4;
+    const legendHeight = 64;
+    const canvasW = 2 * cellSize + gap;
+    const canvasH = cellSize + legendHeight;
 
     const canvas = document.createElement('canvas');
     canvas.width = canvasW;
@@ -943,32 +925,35 @@ export class ImageFlow {
     ctx.fillStyle = '#0b0c0e';
     ctx.fillRect(0, 0, canvasW, canvasH);
 
-    // Draw images with labels
-    ctx.font = 'bold 14px sans-serif';
-    ctx.textAlign = 'center';
-    for (let i = 0; i < images.length; i++) {
-      const x = padding + i * (thumbSize + padding);
-      const y = padding;
-
-      // Label
-      ctx.fillStyle = '#96a1ab';
-      ctx.fillText(labels[i], x + thumbSize / 2, y + 14, thumbSize);
-
-      // Image (fit to square)
-      const img = images[i];
-      const scale = Math.min(thumbSize / img.width, thumbSize / img.height);
+    // Draw original (left)
+    const drawCoverFit = (img, x, y) => {
+      const scale = Math.max(cellSize / img.width, cellSize / img.height);
       const w = img.width * scale;
       const h = img.height * scale;
-      const ix = x + (thumbSize - w) / 2;
-      const iy = y + labelHeight + (thumbSize - h) / 2;
-      ctx.drawImage(img, ix, iy, w, h);
-    }
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(x, y, cellSize, cellSize);
+      ctx.clip();
+      ctx.drawImage(img, x + (cellSize - w) / 2, y + (cellSize - h) / 2, w, h);
+      ctx.restore();
+    };
 
-    // Branding
-    ctx.fillStyle = '#4b5159';
-    ctx.font = '12px sans-serif';
+    drawCoverFit(origImg, 0, 0);
+    drawCoverFit(genImg, cellSize + gap, 0);
+
+    // Legend
+    const descName = descModel?.name || chain.descriptionModel;
+    const genName = genTool?.name || chain.generationTool;
+    const legendY = cellSize;
+
+    ctx.font = 'bold 18px sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('SignalDrift: the visual telephone game', canvasW / 2, canvasH - 14);
+    ctx.fillStyle = '#96a1ab';
+    ctx.fillText(`ORIGINAL  |  DESCRIBED BY ${descName.toUpperCase()}, GENERATED BY ${genName.toUpperCase()}`, canvasW / 2, legendY + 24);
+
+    ctx.font = '14px sans-serif';
+    ctx.fillStyle = '#4b5159';
+    ctx.fillText('signal.12ak.com', canvasW / 2, legendY + 48);
 
     // Download
     const link = document.createElement('a');

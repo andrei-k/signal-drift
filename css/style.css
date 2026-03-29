@@ -1639,6 +1639,11 @@ mark.annotation:hover, mark.annotation:focus {
   margin-top: var(--space-xl);
 }
 
+.welcome-links {
+  text-align: center;
+  padding-bottom: var(--space-2xl);
+}
+
 .welcome-link a {
   color: var(--color-accent);
   text-decoration: none;
