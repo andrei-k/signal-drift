@@ -67,8 +67,7 @@ function modelTip(name, model) {
   if (!model) return escHtml(name);
   const role = model.roleTag || '';
   const detail = model.strength || '';
-  const bench = model.benchmark || '';
-  return `<span class="model-tip">${escHtml(name)}<span class="model-tip__bubble"><span class="model-tip__role">${escHtml(role)}${bench ? ` <span class="model-tip__arena">${escHtml(bench)}</span>` : ''}</span><span class="model-tip__detail">${escHtml(detail)}</span></span></span>`;
+  return `<span class="model-tip">${escHtml(name)}<span class="model-tip__bubble"><span class="model-tip__role">${escHtml(role)}</span><span class="model-tip__detail">${escHtml(detail)}</span></span></span>`;
 }
 
 function genToolTip(name, tool) {
@@ -775,6 +774,7 @@ export class ImageFlow {
         </div>
 
         <p class="welcome-link" style="text-align:center;margin-top:var(--space-lg)"><a href="https://12ak.com/posts/ai-doesnt-hallucinate-your-photos-it-edits-them/" target="_blank" rel="noopener">Read the full analysis &rarr;</a></p>
+        <p class="demo-date">Demo images generated in February 2026</p>
 
         <div class="comparison-actions">
           <button class="btn btn--primary" id="new-chain">Try It Yourself</button>

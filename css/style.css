@@ -1555,6 +1555,13 @@ mark.annotation:hover, mark.annotation:focus {
   margin-top: var(--space-xl);
 }
 
+.demo-date {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  margin-top: var(--space-md);
+}
+
 .welcome-link {
   text-align: center;
   margin: 0;
