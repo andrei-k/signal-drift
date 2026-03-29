@@ -971,19 +971,23 @@ export class ImageFlow {
     if (existing) {
       const genImg = existing.querySelector('.lightbox__img--generated');
       const origImg = existing.querySelector('.lightbox__img--original');
-      const structureMatches = hasOriginal ? !!origImg : !origImg;
-      if (structureMatches) {
-        if (genImg) { genImg.src = src; genImg.alt = escAttr(label); }
-        if (origImg) { origImg.src = originalSrc || ''; origImg.classList.remove('lightbox__img--visible'); }
-        const caption = existing.querySelector('.lightbox__caption');
-        if (caption) caption.textContent = label;
-        const toggleBtn = existing.querySelector('.lightbox__toggle-btn');
-        if (toggleBtn) toggleBtn.textContent = 'Click to compare original';
-        const lens = existing.querySelector('.lightbox__lens');
-        if (lens) lens.classList.remove('lightbox__lens--active');
-        return;
+      const toggleBtn = existing.querySelector('.lightbox__toggle-btn');
+      if (genImg) { genImg.src = src; genImg.alt = escAttr(label); }
+      if (origImg) {
+        origImg.src = hasOriginal ? originalSrc : '';
+        origImg.classList.remove('lightbox__img--visible');
+        origImg.style.display = hasOriginal ? '' : 'none';
       }
-      existing.remove();
+      if (toggleBtn) {
+        toggleBtn.textContent = 'Click to compare original';
+        toggleBtn.style.display = hasOriginal ? '' : 'none';
+        toggleBtn.blur();
+      }
+      const caption = existing.querySelector('.lightbox__caption');
+      if (caption) caption.textContent = label;
+      const lens = existing.querySelector('.lightbox__lens');
+      if (lens) lens.classList.remove('lightbox__lens--active');
+      return;
     }
 
     let overlay = document.querySelector('.lightbox-overlay');
@@ -998,12 +1002,12 @@ export class ImageFlow {
         ${hasNav ? `<button class="lightbox__nav lightbox__nav--next" aria-label="Next image">›</button>` : ''}
         <div class="lightbox__img-container">
           <img src="${src}" alt="${escAttr(label)}" class="lightbox__img lightbox__img--generated">
-          ${hasOriginal ? `<img src="${originalSrc}" alt="Original" class="lightbox__img lightbox__img--original">` : ''}
+          <img src="${hasOriginal ? originalSrc : ''}" alt="Original" class="lightbox__img lightbox__img--original" style="${hasOriginal ? '' : 'display:none'}">
           <div class="lightbox__lens"></div>
         </div>
         <div class="lightbox__caption-bar">
           ${label ? `<span class="lightbox__caption">${escHtml(label)}</span>` : ''}
-          ${hasOriginal ? `<button class="lightbox__toggle-btn" aria-label="Toggle original image">Click to compare original</button>` : ''}
+          <button class="lightbox__toggle-btn" aria-label="Toggle original image" style="${hasOriginal ? '' : 'display:none'}">Click to compare original</button>
         </div>
       </div>
     `;
@@ -1032,21 +1036,15 @@ export class ImageFlow {
       });
     }
 
-    if (hasOriginal) {
-      const toggleBtn = overlay.querySelector('.lightbox__toggle-btn');
+    overlay.querySelector('.lightbox__toggle-btn')?.addEventListener('click', (e) => {
+      e.stopPropagation();
       const origImg = overlay.querySelector('.lightbox__img--original');
-      const imgContainer = overlay.querySelector('.lightbox__img-container');
-
+      const toggleBtn = overlay.querySelector('.lightbox__toggle-btn');
       const caption = overlay.querySelector('.lightbox__caption');
-      const originalCaptionText = caption?.textContent;
-      const toggle = () => {
-        const showing = origImg.classList.toggle('lightbox__img--visible');
-        toggleBtn.textContent = showing ? 'Click to switch back' : 'Click to compare original';
-        if (caption) caption.textContent = showing ? 'Original' : originalCaptionText;
-      };
-
-      toggleBtn.addEventListener('click', (e) => { e.stopPropagation(); toggle(); });
-    }
+      const showing = origImg.classList.toggle('lightbox__img--visible');
+      toggleBtn.textContent = showing ? 'Click to switch back' : 'Click to compare original';
+      if (caption) caption.textContent = showing ? 'Original' : label;
+    });
 
     const close = () => this._closeLightbox();
     overlay.addEventListener('click', (e) => {
