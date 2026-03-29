@@ -221,8 +221,9 @@ export class ImageFlow {
           <button class="btn btn--primary btn--lg" id="welcome-start">Start Your Own</button>
         </div>
         <div class="welcome-links">
-          <p class="welcome-link"><a href="https://12ak.com/posts/what-ai-sees/" target="_blank" rel="noopener">AI Doesn't Hallucinate Your Photos. It Edits Them. &rarr;</a></p>
+          <p class="welcome-links__preface">Read more about the project and findings</p>
           <p class="welcome-link"><a href="https://12ak.com/posts/how-i-built-signal-drift/" target="_blank" rel="noopener">How I Built Signal Drift &rarr;</a></p>
+          <p class="welcome-link"><a href="https://12ak.com/posts/ai-doesnt-hallucinate-your-photos-it-edits-them/" target="_blank" rel="noopener">AI Doesn't Hallucinate Your Photos. It Edits Them. &rarr;</a></p>
         </div>
       </section>
     `;
@@ -773,7 +774,7 @@ export class ImageFlow {
           </div>
         </div>
 
-        <p class="welcome-link" style="text-align:center;margin-top:var(--space-lg)"><a href="https://12ak.com/posts/what-ai-sees/" target="_blank" rel="noopener">Read the full analysis &rarr;</a></p>
+        <p class="welcome-link" style="text-align:center;margin-top:var(--space-lg)"><a href="https://12ak.com/posts/ai-doesnt-hallucinate-your-photos-it-edits-them/" target="_blank" rel="noopener">Read the full analysis &rarr;</a></p>
 
         <div class="comparison-actions">
           <button class="btn btn--primary" id="new-chain">Try It Yourself</button>
