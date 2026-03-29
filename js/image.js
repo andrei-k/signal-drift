@@ -13,18 +13,18 @@ const IMAGE_STEPS = [
 const VISION_MODELS = ['chatgpt', 'copilot', 'gemini-pro'];
 
 const IMAGE_GEN_TOOLS = [
-  { id: 'gpt-image', name: 'GPT Image', url: 'https://chatgpt.com', note: 'Ranked #1 in community blind tests. Best text rendering and prompt adherence. ~$0.04–0.12/image', color: '#10B981', bestFor: 'Text-heavy design, branding, precision', rank: '#1 overall' },
-  { id: 'nano-banana', name: 'Nano Banana Pro', url: 'https://gemini.google.com', note: 'Ranked #2 in community blind tests. Native 4K output, 97% text accuracy across 100+ languages. Conversational editing via Gemini', color: '#3B82F6', bestFor: 'Speed, conversational editing, multilingual', rank: '#2 overall' },
-  { id: 'copilot-designer', name: 'Copilot Designer', url: 'https://designer.microsoft.com', note: 'Microsoft Designer: free DALL-E-powered image generation, integrated into Copilot', color: '#0EA5E9', bestFor: 'Free, accessible, no setup needed', rank: 'Free tier' },
-  { id: 'flux', name: 'Flux 2', url: 'https://blackforestlabs.ai', note: '5 variants (max/pro/flex/dev/klein). Open-weight dev model. 4MP output, multi-reference editing, precise color matching. ~$0.015–0.03/image', color: '#2563EB', bestFor: 'Photorealism, customization, production pipelines', rank: 'Top 12' },
-  { id: 'midjourney', name: 'Midjourney V7', url: 'https://midjourney.com', note: 'Gold standard for aesthetics — composition, lighting, texture. Weak at text rendering. $10–120/mo', color: '#7C3AED', bestFor: 'Concept art, mood boards, visual beauty', rank: 'Top tier (aesthetics)' },
-  { id: 'grok-aurora', name: 'Grok (Aurora)', url: 'https://grok.com', note: 'Experimental generator from xAI. Known quality issues — gibberish anatomy, ignored instructions', color: '#000000', bestFor: 'Experimental only', rank: 'Experimental' },
-  { id: 'ideogram', name: 'Ideogram 3.0', url: 'https://ideogram.ai', note: '~90% text rendering accuracy. Behind frontier models but best for typography-heavy work', color: '#F43F5E', bestFor: 'Logos, posters, packaging with text', rank: 'Niche leader (text)' },
-  { id: 'recraft', name: 'Recraft V4', url: 'https://recraft.ai', note: 'Feb 2026. Design-focused: balanced composition, refined detail. Production-ready SVG/vector export. Standard (1MP) and Pro (4MP) variants', color: '#F59E0B', bestFor: 'Logos, vector graphics, design assets', rank: 'Niche leader (design)' },
-  { id: 'hunyuan', name: 'Hunyuan 3.0', url: 'https://hunyuan.tencent.com', note: 'Top open-source model. Excels at anime, character art, Eastern aesthetics. Commercial license', color: '#EC4899', bestFor: 'Anime, character art, open-source', rank: 'Top open-source' },
-  { id: 'kimi', name: 'Kimi K2.5', url: 'https://kimi.moonshot.cn', note: 'Moonshot AI. Native multimodal with 256K context. Agent Swarm mode coordinates up to 100 parallel sub-agents', color: '#8B5CF6', bestFor: 'Cross-modal, CJK content, agentic workflows', rank: '—' },
-  { id: 'meta-ai-img', name: 'Meta AI (Imagine)', url: 'https://meta.ai', note: 'Free image generation via Meta AI. Based on Llama + Emu models', color: '#6366F1', bestFor: 'Free, social sharing', rank: 'Free tier' },
-  { id: 'canva-ai', name: 'Canva AI', url: 'https://www.canva.com/ai-image-generator/', note: 'Free AI image generation in Canva. Good for quick social media assets', color: '#00C4CC', bestFor: 'Quick social media assets', rank: 'Free tier' },
+  { id: 'gpt-image', name: 'GPT Image', url: 'https://chatgpt.com', color: '#10B981' },
+  { id: 'nano-banana', name: 'Nano Banana Pro', url: 'https://gemini.google.com', color: '#3B82F6' },
+  { id: 'copilot-designer', name: 'Copilot Designer', url: 'https://designer.microsoft.com', color: '#0EA5E9' },
+  { id: 'flux', name: 'Flux', url: 'https://blackforestlabs.ai', color: '#2563EB' },
+  { id: 'midjourney', name: 'Midjourney', url: 'https://midjourney.com', color: '#7C3AED' },
+  { id: 'grok-aurora', name: 'Grok (Aurora)', url: 'https://grok.com', color: '#000000' },
+  { id: 'ideogram', name: 'Ideogram', url: 'https://ideogram.ai', color: '#F43F5E' },
+  { id: 'recraft', name: 'Recraft', url: 'https://recraft.ai', color: '#F59E0B' },
+  { id: 'hunyuan', name: 'Hunyuan', url: 'https://hunyuan.tencent.com', color: '#EC4899' },
+  { id: 'kimi', name: 'Kimi', url: 'https://kimi.moonshot.cn', color: '#8B5CF6' },
+  { id: 'meta-ai-img', name: 'Meta AI', url: 'https://meta.ai', color: '#6366F1' },
+  { id: 'canva-ai', name: 'Canva AI', url: 'https://www.canva.com/ai-image-generator/', color: '#00C4CC' },
 ];
 
 const CHEVRON_SVG = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
@@ -70,13 +70,6 @@ function modelTip(name, model) {
   return `<span class="model-tip">${escHtml(name)}<span class="model-tip__bubble"><span class="model-tip__role">${escHtml(role)}</span><span class="model-tip__detail">${escHtml(detail)}</span></span></span>`;
 }
 
-function genToolTip(name, tool) {
-  if (!tool) return escHtml(name);
-  const rank = tool.rank || '';
-  const bestFor = tool.bestFor || '';
-  const note = tool.note || '';
-  return `<span class="model-tip">${escHtml(name)}<span class="model-tip__bubble"><span class="model-tip__role">${escHtml(name)}${rank && rank !== '—' ? ` <span class="model-tip__arena">${escHtml(rank)}</span>` : ''}</span><span class="model-tip__detail">${escHtml(note)}</span>${bestFor ? `<span class="model-tip__best-for">Best for: ${escHtml(bestFor)}</span>` : ''}</span></span>`;
-}
 
 function createEmptyChain() {
   return { descriptionModel: '', description: '', generationTool: '', generatedImageDataUrl: null };
@@ -433,7 +426,6 @@ export class ImageFlow {
             ${selectedTool ? `
             <div class="model-card">
               <div class="model-card__inner" style="border-left: 3px solid #6b7280">
-                <span class="model-card__tag">${selectedTool.note}</span>
                 <a href="${selectedTool.url}" target="_blank" rel="noopener" class="model-card__link">Open ${selectedTool.name} ↗</a>
               </div>
             </div>` : ''}
@@ -606,7 +598,7 @@ export class ImageFlow {
           <div class="demo-card__header">
             <span class="demo-card__label">
               <span class="chain-tab__dot" style="background:${genColor};width:10px;height:10px;border-radius:50%;display:inline-block;flex-shrink:0"></span>
-              ${genToolTip(label, genTool)}
+              ${escHtml(label)}
               ${controlBadge}
             </span>
           </div>
@@ -739,7 +731,7 @@ export class ImageFlow {
           <div class="demo-section__header">
             <h3 class="demo-section__title">Same image. Different eyes. Different stories.</h3>
             <p class="demo-section__subtitle">
-              Three models describe the same photo. All descriptions go to <strong>${genToolTip(sgGenTool?.name || sg.generationToolName, sgGenTool)}</strong>.
+              Three models describe the same photo. All descriptions go to <strong>${escHtml(sgGenTool?.name || sg.generationToolName)}</strong>.
               The only variable is who wrote the prompt.
             </p>
           </div>
